@@ -28,19 +28,19 @@ function LanguageToggle({ language, onLanguageChange, t }) {
 
         <motion.div
           variants={cardReveal}
-          className="glow-card float-soft rounded-[2rem] border border-white/80 bg-white/70 p-5 shadow-2xl shadow-emerald-950/10 backdrop-blur-xl"
+          className="glass-panel glow-card float-soft rounded-[2rem] p-5"
         >
-          <div className="flex flex-col gap-4 rounded-[1.5rem] border border-emerald-100 bg-emerald-50/60 p-4 sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex flex-col gap-4 rounded-[1.5rem] border border-emerald-100/80 bg-emerald-50/55 p-4 shadow-inner shadow-white/50 backdrop-blur sm:flex-row sm:items-center sm:justify-between">
             <div className="flex items-center gap-3">
               <span className="rounded-full bg-emerald-600 px-3 py-1 text-xs font-black text-white">
                 {activeLanguage.shortLabel}
               </span>
-              <span className="rounded-full bg-white px-3 py-1 text-xs font-black text-emerald-700 shadow-sm">
+              <span className="rounded-full border border-emerald-100 bg-white/80 px-3 py-1 text-xs font-black text-emerald-700 shadow-sm backdrop-blur">
                 {activeLanguage.label} {t.active}
               </span>
             </div>
 
-            <div className="flex flex-wrap gap-2 rounded-3xl bg-white p-2 shadow-inner ring-1 ring-emerald-100">
+            <div className="flex flex-wrap gap-2 rounded-3xl border border-white/80 bg-white/65 p-2 shadow-inner shadow-white/60 backdrop-blur ring-1 ring-emerald-100">
               {languageOptions.map((option) => {
                 const isActive = option.code === language
 
@@ -62,7 +62,7 @@ function LanguageToggle({ language, onLanguageChange, t }) {
             </div>
           </div>
 
-          <div className="mt-5 overflow-hidden rounded-[1.5rem] bg-slate-950 p-6 text-white shadow-xl shadow-emerald-950/20">
+          <div className="glass-panel-dark mt-5 overflow-hidden rounded-[1.5rem] p-6 text-white">
             <div className="mb-5 flex flex-wrap gap-2">
               <span className="rounded-full bg-lime-300/15 px-3 py-1 text-xs font-black text-lime-200 ring-1 ring-lime-200/20">
                 {t.sampleBadge}
@@ -79,7 +79,7 @@ function LanguageToggle({ language, onLanguageChange, t }) {
               <p className="mt-4 text-lg leading-8 text-slate-200">
                 {t.sampleText}
               </p>
-              <div className="mt-6 rounded-3xl bg-emerald-400/15 p-5 ring-1 ring-emerald-300/20">
+              <div className="mt-6 rounded-3xl border border-emerald-300/20 bg-emerald-400/15 p-5 shadow-inner shadow-emerald-200/5 backdrop-blur">
                 <p className="font-bold leading-7 text-emerald-50">
                   {t.sampleTip}
                 </p>

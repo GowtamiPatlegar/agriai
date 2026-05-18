@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion'
+import FloatingLeaves from '../components/FloatingLeaves'
 import HeroVisual from '../components/HeroVisual'
 import { stats } from '../data/agriData'
 import { cardReveal, sectionReveal, viewportSettings } from '../animations/motionVariants'
@@ -10,13 +11,21 @@ function HeroSection({ t }) {
       initial="hidden"
       whileInView="visible"
       viewport={viewportSettings}
-      className="section-reveal mx-auto grid min-h-[calc(100vh-84px)] w-full max-w-7xl items-center gap-12 px-5 py-14 sm:px-8 lg:grid-cols-[1.05fr_0.95fr] lg:py-24"
+      className="section-reveal relative mx-auto grid min-h-[calc(100vh-200px)] w-full max-w-7xl items-center gap-12 px-5 py-14 sm:px-8 lg:grid-cols-[1.05fr_0.95fr] lg:py-24"
     >
-      <motion.div variants={cardReveal} className="animate-fade-up">
-        <span className="mb-5 inline-flex rounded-full border border-emerald-200 bg-white/75 px-4 py-2 text-sm font-bold text-emerald-700 shadow-sm">
+      <FloatingLeaves />
+      <div className="hero-particles" aria-hidden="true">
+        <span />
+        <span />
+        <span />
+        <span />
+      </div>
+
+      <motion.div variants={cardReveal} className="animate-fade-up relative z-10">
+        <span className="mb-5 inline-flex rounded-full border border-emerald-200/80 bg-white/70 px-4 py-2 text-sm font-bold text-emerald-700 shadow-sm backdrop-blur">
           {t.eyebrow}
         </span>
-        <h1 className="max-w-4xl text-4xl font-black leading-tight text-slate-950 sm:text-5xl lg:text-7xl">
+        <h1 className="max-w-4xl bg-gradient-to-r from-slate-950 via-emerald-800 to-lime-600 bg-clip-text text-4xl font-black leading-tight text-transparent sm:text-5xl lg:text-7xl">
           {t.title}
         </h1>
         <p className="mt-6 max-w-2xl text-lg leading-8 text-slate-600">
@@ -43,7 +52,7 @@ function HeroSection({ t }) {
             <motion.div
               variants={cardReveal}
               key={stat.label}
-              className="glow-card stagger-card rounded-2xl border border-white/80 bg-white/70 p-4 shadow-sm backdrop-blur transition duration-300 hover:-translate-y-1"
+              className="glass-panel glow-card stagger-card rounded-2xl p-4 transition duration-300 hover:-translate-y-1"
             >
               <p className="text-2xl font-black text-emerald-700">
                 {stat.value}
@@ -56,7 +65,7 @@ function HeroSection({ t }) {
         </motion.div>
       </motion.div>
 
-      <motion.div variants={cardReveal}>
+      <motion.div variants={cardReveal} className="relative z-10">
         <HeroVisual />
       </motion.div>
     </motion.section>

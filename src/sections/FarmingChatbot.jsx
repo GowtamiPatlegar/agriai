@@ -3,11 +3,10 @@ import { AnimatePresence, motion } from 'framer-motion'
 import ChatMessage from '../components/ChatMessage'
 import TypingIndicator from '../components/TypingIndicator'
 import { cardReveal, sectionReveal, viewportSettings } from '../animations/motionVariants'
-import { sampleMessages } from '../data/agriData'
 import { getHuggingFaceChatbotResponse } from '../services/huggingFaceService'
 
 function FarmingChatbot({ t }) {
-  const [messages, setMessages] = useState(sampleMessages)
+  const [messages, setMessages] = useState([])
   const [inputValue, setInputValue] = useState('')
   const [isTyping, setIsTyping] = useState(false)
 
@@ -62,7 +61,7 @@ function FarmingChatbot({ t }) {
       whileInView="visible"
       viewport={viewportSettings}
       id="assistant"
-      className="particle-field border-b border-slate-200/80 bg-[radial-gradient(circle_at_top_left,#ccfbf1,transparent_30%),linear-gradient(135deg,#f8fafc_0%,#eef2ff_44%,#ecfdf5_100%)] px-5 py-20 sm:px-8 lg:py-24"
+      className="particle-field border-b border-emerald-950/10 bg-[radial-gradient(circle_at_top_left,#ccfbf1,transparent_30%),radial-gradient(circle_at_bottom_right,#0f766e22,transparent_30%),linear-gradient(135deg,#f8fafc_0%,#eef2ff_44%,#ecfdf5_100%)] px-5 py-20 sm:px-8 lg:py-24"
     >
       <div className="section-reveal mx-auto grid max-w-6xl gap-8 lg:grid-cols-[0.85fr_1.15fr] lg:items-center">
         <motion.div variants={cardReveal}>
@@ -79,28 +78,56 @@ function FarmingChatbot({ t }) {
 
         <motion.div
           variants={cardReveal}
-          className="glow-card float-soft rounded-[2rem] border border-white/80 bg-white/55 p-4 shadow-2xl shadow-emerald-950/10 backdrop-blur-xl sm:p-5"
+          className="assistant-shell glow-card float-soft relative overflow-hidden rounded-[2rem] p-3 sm:p-4"
         >
-          <div className="rounded-[1.5rem] border border-white/80 bg-white/70 shadow-inner shadow-emerald-900/5 backdrop-blur">
-            <div className="flex items-center justify-between border-b border-emerald-100 px-5 py-4">
+          <div className="assistant-grid absolute inset-0 opacity-70" aria-hidden="true" />
+          <div className="relative rounded-[1.5rem] border border-white/10 bg-slate-950/52 shadow-inner shadow-emerald-300/5 backdrop-blur-xl">
+            <div className="flex items-center justify-between border-b border-emerald-300/15 px-5 py-4">
               <div className="flex items-center gap-3">
-                <div className="animated-gradient flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-emerald-600 to-lime-500 shadow-lg shadow-emerald-700/25">
-                  <span className="h-5 w-5 rounded-full border-2 border-white border-t-transparent" />
+                <div className="assistant-avatar animated-gradient flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-emerald-400 via-teal-400 to-lime-300 text-slate-950 shadow-lg shadow-emerald-300/25">
+                  <svg
+                    className="h-6 w-6"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    aria-hidden="true"
+                  >
+                    <path
+                      d="M12 3v18M7 7h10M7 17h10M8 3 6 7l2 3-2 4 2 7M16 3l2 4-2 3 2 4-2 7"
+                      stroke="currentColor"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                    />
+                  </svg>
                 </div>
                 <div>
-                  <h3 className="font-black text-slate-950">{t.chatTitle}</h3>
-                  <p className="text-sm font-semibold text-emerald-700">
+                  <h3 className="font-black text-white">{t.chatTitle}</h3>
+                  <p className="text-sm font-semibold text-emerald-200">
                     {t.status}
                   </p>
                 </div>
               </div>
-              <span className="rounded-full bg-emerald-100 px-3 py-1 text-xs font-black text-emerald-700">
+              <span className="rounded-full border border-lime-300/30 bg-lime-300/10 px-3 py-1 text-xs font-black text-lime-200 shadow-sm shadow-lime-300/10 backdrop-blur">
                 {t.live}
               </span>
             </div>
 
             <motion.div layout className="h-[430px] space-y-4 overflow-y-auto scroll-smooth px-4 py-5 sm:px-5">
               <AnimatePresence initial={false}>
+                {messages.length === 0 && !isTyping && (
+                  <motion.div
+                    key="chat-helper"
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -8 }}
+                    className="flex h-full items-center justify-center text-center"
+                  >
+                    <p className="max-w-xs rounded-2xl border border-white/10 bg-white/5 px-5 py-4 text-sm font-semibold leading-6 text-slate-300 shadow-inner shadow-white/5 backdrop-blur">
+                      Ask about crops, soil, fertilizer, irrigation, or weather
+                    </p>
+                  </motion.div>
+                )}
+
                 {messages.map((message) => (
                   <ChatMessage key={message.id} message={message} />
                 ))}
@@ -122,14 +149,14 @@ function FarmingChatbot({ t }) {
 
             <form
               onSubmit={handleSend}
-              className="flex flex-col gap-3 border-t border-emerald-100 p-4 sm:flex-row"
+              className="flex flex-col gap-3 border-t border-emerald-300/15 p-4 sm:flex-row"
             >
               <input
                 type="text"
                 value={inputValue}
                 onChange={(event) => setInputValue(event.target.value)}
                 placeholder={t.placeholder}
-                className="min-h-12 flex-1 rounded-2xl border border-emerald-100 bg-white/90 px-4 font-medium text-slate-800 outline-none transition placeholder:text-slate-400 focus:border-emerald-400 focus:ring-4 focus:ring-emerald-100"
+                className="assistant-input min-h-12 flex-1 rounded-2xl border border-emerald-300/20 px-4 font-medium text-white outline-none transition placeholder:text-slate-400 focus:border-lime-300/70 focus:ring-4 focus:ring-emerald-300/10"
               />
               <button
                 type="submit"

@@ -3,12 +3,13 @@ import { AnimatePresence, motion } from 'framer-motion'
 import AIProcessingLoader from '../components/AIProcessingLoader'
 import UploadIcon from '../components/UploadIcon'
 import { cardReveal, sectionReveal, viewportSettings } from '../animations/motionVariants'
-import { getDiseasePrediction } from '../services/mockAiService'
+import { detectCropDisease } from '../services/diseaseDetectionService'
 import { isImageFile } from '../utils/fileHelpers'
 
 function DiseaseDetection({ t }) {
   const [imagePreview, setImagePreview] = useState('')
   const [fileName, setFileName] = useState('')
+  const [selectedFile, setSelectedFile] = useState(null)
   const [isDragging, setIsDragging] = useState(false)
   const [isAnalyzing, setIsAnalyzing] = useState(false)
   const [result, setResult] = useState(null)
@@ -23,6 +24,7 @@ function DiseaseDetection({ t }) {
     reader.onload = () => {
       setImagePreview(reader.result)
       setFileName(file.name)
+      setSelectedFile(file)
       setResult(null)
     }
 
@@ -40,17 +42,30 @@ function DiseaseDetection({ t }) {
   }
 
   async function analyzeLeaf() {
-    if (!imagePreview) {
+    if (!selectedFile) {
       return
     }
 
     setIsAnalyzing(true)
     setResult(null)
 
-    const prediction = await getDiseasePrediction()
+    try {
+      const prediction = await detectCropDisease(selectedFile)
 
-    setResult(prediction)
-    setIsAnalyzing(false)
+      setResult(prediction)
+    } catch (error) {
+      console.error('Crop disease detection error:', error instanceof Error ? error.message : error)
+      console.error('Full crop disease detection error object:', error)
+
+      setResult({
+        diseaseName: 'Analysis unavailable',
+        confidence: 0,
+        recommendation:
+          'The AI disease detection service could not analyze this image right now. Please check your Hugging Face API key or internet connection, then try again with a clear leaf photo.',
+      })
+    } finally {
+      setIsAnalyzing(false)
+    }
   }
 
   return (
@@ -77,7 +92,7 @@ function DiseaseDetection({ t }) {
         <motion.div variants={sectionReveal} className="grid gap-6 lg:grid-cols-[1.05fr_0.95fr]">
           <motion.div
             variants={cardReveal}
-            className="glow-card stagger-card rounded-[2rem] border border-white/80 bg-white/85 p-5 shadow-2xl shadow-emerald-950/10 backdrop-blur"
+            className="glass-panel glow-card stagger-card rounded-[2rem] p-5"
           >
             <label
               onDragOver={(event) => {
@@ -88,8 +103,8 @@ function DiseaseDetection({ t }) {
               onDrop={handleDrop}
               className={`group flex min-h-[420px] cursor-pointer flex-col items-center justify-center rounded-[1.5rem] border-2 border-dashed p-6 text-center transition duration-300 ${
                 isDragging
-                  ? 'scale-[1.01] border-emerald-500 bg-emerald-50 shadow-inner'
-                  : 'border-emerald-200 bg-gradient-to-br from-white to-emerald-50/70 hover:-translate-y-1 hover:border-emerald-400 hover:shadow-xl hover:shadow-emerald-900/10'
+                  ? 'scale-[1.01] border-emerald-500 bg-emerald-50/75 shadow-inner'
+                  : 'border-emerald-200/80 bg-gradient-to-br from-white/75 to-emerald-50/55 shadow-inner shadow-white/50 backdrop-blur hover:-translate-y-1 hover:border-emerald-400 hover:shadow-xl hover:shadow-emerald-900/10'
               }`}
             >
               <input
@@ -101,7 +116,10 @@ function DiseaseDetection({ t }) {
 
               {imagePreview ? (
                 <div className="w-full">
-                  <div className="relative overflow-hidden rounded-3xl border border-emerald-100 bg-white shadow-lg">
+                  <div className={`scan-frame relative overflow-hidden rounded-3xl border bg-white/80 shadow-xl shadow-emerald-950/10 backdrop-blur transition duration-500 ${
+                    isAnalyzing ? 'border-lime-300/80' : 'border-emerald-100/80'
+                  }`}
+                  >
                     <img
                       src={imagePreview}
                       alt="Uploaded leaf preview"
@@ -115,20 +133,24 @@ function DiseaseDetection({ t }) {
                           exit={{ opacity: 0 }}
                           className="pointer-events-none absolute inset-0"
                         >
-                          <div className="absolute inset-0 bg-emerald-950/15" />
-                          <motion.div
-                            initial={{ y: '-20%' }}
-                            animate={{ y: '125%' }}
-                            transition={{
-                              duration: 1.35,
-                              ease: 'easeInOut',
-                              repeat: Infinity,
-                            }}
-                            className="absolute left-0 right-0 top-0 h-20 border-y border-lime-200/80 bg-gradient-to-b from-transparent via-lime-300/35 to-transparent shadow-[0_0_36px_rgba(190,242,100,0.7)]"
-                          />
-                          <div className="absolute inset-4 rounded-2xl border border-lime-200/70 shadow-[0_0_34px_rgba(132,204,22,0.55),inset_0_0_26px_rgba(16,185,129,0.35)]" />
-                          <div className="absolute bottom-4 left-4 rounded-full bg-slate-950/75 px-4 py-2 text-xs font-black uppercase tracking-[0.16em] text-lime-200 backdrop-blur">
-                            AI Scan Active
+                          <div className="absolute inset-0 bg-slate-950/30" />
+                          <div className="scan-grid-overlay absolute inset-0 opacity-90" />
+                          <div className="scan-corners absolute inset-0" />
+                          <div className="scan-line absolute left-0 right-0 top-0 h-24 border-y border-lime-200/80 bg-gradient-to-b from-transparent via-lime-300/40 to-transparent shadow-[0_0_42px_rgba(190,242,100,0.78)]" />
+                          <div className="absolute inset-4 rounded-2xl border border-lime-200/70 shadow-[0_0_42px_rgba(132,204,22,0.65),inset_0_0_30px_rgba(16,185,129,0.38)]" />
+                          <div className="absolute left-4 top-4 rounded-full border border-lime-200/40 bg-slate-950/70 px-4 py-2 text-xs font-black uppercase tracking-[0.16em] text-lime-200 shadow-lg shadow-lime-300/10 backdrop-blur">
+                            Neural leaf scan
+                          </div>
+                          <div className="absolute bottom-4 left-4 right-4 rounded-2xl border border-white/10 bg-slate-950/70 p-3 text-left shadow-xl shadow-emerald-950/30 backdrop-blur">
+                            <div className="flex items-center justify-between gap-3">
+                              <span className="text-xs font-black uppercase tracking-[0.16em] text-emerald-200">
+                                AI Detection Overlay
+                              </span>
+                              <span className="h-2.5 w-2.5 rounded-full bg-lime-300 shadow-lg shadow-lime-300/70" />
+                            </div>
+                            <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-white/10">
+                              <div className="processing-bar h-full rounded-full bg-gradient-to-r from-lime-300 via-emerald-300 to-teal-300" />
+                            </div>
                           </div>
                         </motion.div>
                       )}
@@ -171,7 +193,7 @@ function DiseaseDetection({ t }) {
 
           <motion.div
             variants={cardReveal}
-            className="glow-card stagger-card rounded-[2rem] border border-white/80 bg-slate-950 p-6 text-white shadow-2xl shadow-emerald-950/20 [animation-delay:120ms]"
+            className="glass-panel-dark glow-card stagger-card rounded-[2rem] p-6 text-white [animation-delay:120ms]"
           >
             <div className="mb-8 flex items-center justify-between">
               <div>
@@ -219,13 +241,13 @@ function DiseaseDetection({ t }) {
                 <motion.div
                   initial={{ opacity: 0, y: 14 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="rounded-3xl bg-white/10 p-5 ring-1 ring-white/10"
+                  className="glass-inset rounded-3xl p-5 text-white"
                 >
                   <p className="text-sm font-bold text-slate-300">
                     {t.diseaseName}
                   </p>
                   <p className="mt-2 text-2xl font-black text-lime-200">
-                    {t.predictionName || result.diseaseName}
+                    {result.diseaseName || t.predictionName}
                   </p>
                 </motion.div>
 
@@ -233,7 +255,7 @@ function DiseaseDetection({ t }) {
                   initial={{ opacity: 0, y: 14 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.08 }}
-                  className="rounded-3xl bg-white/10 p-5 ring-1 ring-white/10"
+                  className="glass-inset rounded-3xl p-5 text-white"
                 >
                   <div className="flex items-center justify-between gap-4">
                     <p className="text-sm font-bold text-slate-300">
@@ -243,12 +265,12 @@ function DiseaseDetection({ t }) {
                       {result.confidence}%
                     </p>
                   </div>
-                  <div className="mt-4 h-3 overflow-hidden rounded-full bg-white/10">
+                  <div className="mt-4 h-4 overflow-hidden rounded-full border border-white/10 bg-white/10 p-0.5">
                     <motion.div
                       initial={{ width: 0 }}
                       animate={{ width: `${result.confidence}%` }}
-                      transition={{ delay: 0.28, duration: 0.8, ease: 'easeOut' }}
-                      className="h-full rounded-full bg-gradient-to-r from-lime-300 to-emerald-400 transition-all duration-700"
+                      transition={{ delay: 0.28, duration: 1, ease: [0.22, 1, 0.36, 1] }}
+                      className="confidence-glow h-full rounded-full bg-gradient-to-r from-lime-300 via-emerald-300 to-teal-300 transition-all duration-700"
                     />
                   </div>
                 </motion.div>
@@ -257,13 +279,13 @@ function DiseaseDetection({ t }) {
                   initial={{ opacity: 0, y: 14 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.16 }}
-                  className="rounded-3xl bg-emerald-400/15 p-5 ring-1 ring-emerald-300/20"
+                  className="rounded-3xl border border-emerald-300/20 bg-emerald-400/15 p-5 shadow-inner shadow-emerald-200/5 backdrop-blur"
                 >
                   <p className="text-sm font-bold text-lime-200">
                     {t.treatment}
                   </p>
                   <p className="mt-3 leading-7 text-emerald-50">
-                    {t.recommendationText || result.recommendation}
+                    {result.recommendation || t.recommendationText}
                   </p>
                 </motion.div>
               </motion.div>

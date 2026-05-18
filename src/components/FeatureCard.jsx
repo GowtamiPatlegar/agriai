@@ -5,7 +5,7 @@ function FeatureCard({ feature, index }) {
   return (
     <motion.article
       variants={cardReveal}
-      className="glow-card stagger-card group relative overflow-hidden rounded-3xl border border-white/70 bg-white/85 p-6 shadow-xl shadow-emerald-950/5 backdrop-blur transition duration-300 micro-hover hover:border-emerald-200 hover:shadow-2xl hover:shadow-emerald-900/15"
+      className="glass-panel glow-card stagger-card group relative overflow-hidden rounded-3xl p-6 transition duration-300 micro-hover hover:border-emerald-200 hover:shadow-2xl hover:shadow-emerald-900/15"
       style={{ animationDelay: `${index * 120}ms` }}
     >
       <div
@@ -16,7 +16,7 @@ function FeatureCard({ feature, index }) {
       </div>
       <h3 className="mb-3 text-xl font-bold text-slate-950">{feature.title}</h3>
       <p className="leading-7 text-slate-600">{feature.description}</p>
-      <div className="absolute -right-10 -top-10 h-28 w-28 rounded-full bg-emerald-100 opacity-0 transition duration-300 group-hover:opacity-80" />
+      <div className="absolute -right-10 -top-10 h-28 w-28 rounded-full bg-emerald-200/60 blur-2xl opacity-0 transition duration-300 group-hover:opacity-80" />
     </motion.article>
   )
 }

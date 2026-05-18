@@ -17,7 +17,7 @@ function WeatherMetricSkeletons() {
       {[1, 2, 3, 4].map((item) => (
         <div
           key={item}
-          className="rounded-3xl border border-white/80 bg-white/70 p-5 shadow-xl shadow-emerald-950/5 backdrop-blur"
+          className="glass-panel rounded-3xl p-5"
         >
           <div className="shimmer h-14 w-14 rounded-2xl bg-emerald-100" />
           <div className="shimmer mt-5 h-3 w-28 rounded-full bg-slate-200/80" />
@@ -39,7 +39,7 @@ function AdvisorySkeletons() {
       transition={{ duration: 0.35 }}
       className="mt-8 grid gap-6 lg:grid-cols-[1.1fr_0.9fr]"
     >
-      <div className="rounded-[2rem] border border-white/80 bg-white/70 p-6 shadow-xl shadow-emerald-950/5 backdrop-blur">
+      <div className="glass-panel rounded-[2rem] p-6">
         <div className="shimmer h-4 w-48 rounded-full bg-emerald-100" />
         <div className="mt-6 space-y-4">
           {[1, 2, 3].map((item) => (
@@ -54,7 +54,7 @@ function AdvisorySkeletons() {
         </div>
       </div>
 
-      <div className="rounded-[2rem] border border-white/80 bg-slate-950 p-6 shadow-2xl shadow-emerald-950/20">
+      <div className="glass-panel-dark rounded-[2rem] p-6">
         <div className="shimmer h-4 w-44 rounded-full bg-white/10" />
         <div className="shimmer mt-5 h-8 w-64 max-w-full rounded-full bg-white/10" />
         <div className="shimmer mt-6 h-3 w-full rounded-full bg-white/10" />
@@ -88,7 +88,7 @@ function WeatherAdvisory({ t }) {
       <div className="section-reveal mx-auto max-w-7xl">
         <motion.div
           variants={cardReveal}
-          className="glow-card mb-8 rounded-[2rem] border border-amber-200/80 bg-gradient-to-r from-amber-100/85 via-lime-100/85 to-emerald-100/85 p-5 shadow-xl shadow-emerald-950/5 backdrop-blur"
+          className="glow-card mb-8 rounded-[2rem] border border-amber-200/70 bg-gradient-to-r from-amber-100/75 via-lime-100/70 to-emerald-100/75 p-5 shadow-xl shadow-emerald-950/5 backdrop-blur-xl"
         >
           <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <div>
@@ -120,9 +120,9 @@ function WeatherAdvisory({ t }) {
 
           <motion.div
             variants={cardReveal}
-            className="glow-card float-soft rounded-[2rem] border border-white/80 bg-white/55 p-5 shadow-2xl shadow-emerald-950/10 backdrop-blur-xl"
+            className="glass-panel glow-card float-soft rounded-[2rem] p-5"
           >
-            <div className="animated-gradient rounded-[1.5rem] bg-gradient-to-br from-emerald-700 via-green-600 to-lime-500 p-6 text-white shadow-inner">
+            <div className="animated-gradient rounded-[1.5rem] bg-gradient-to-br from-emerald-700 via-green-600 to-lime-500 p-6 text-white shadow-2xl shadow-emerald-950/15">
               <p className="text-sm font-bold text-emerald-50">{t.today}</p>
               <div className="mt-5 flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
                 <div>
@@ -131,7 +131,7 @@ function WeatherAdvisory({ t }) {
                     {t.forecast}
                   </p>
                 </div>
-                <div className="rounded-3xl bg-white/18 p-4 backdrop-blur">
+                <div className="glass-inset rounded-3xl p-4">
                   <p className="text-sm text-emerald-50">{t.bestWindow}</p>
                   <p className="mt-1 text-2xl font-black">6 AM - 10 AM</p>
                 </div>
@@ -176,7 +176,7 @@ function WeatherAdvisory({ t }) {
             >
               <motion.div
                 variants={cardReveal}
-                className="glow-card rounded-[2rem] border border-white/80 bg-white/70 p-6 shadow-xl shadow-emerald-950/5 backdrop-blur"
+                className="glass-panel glow-card rounded-[2rem] p-6"
               >
                 <p className="text-sm font-black uppercase tracking-[0.18em] text-emerald-600">
                   {t.recommendationsTitle}
@@ -185,7 +185,7 @@ function WeatherAdvisory({ t }) {
                   {t.recommendations.map((recommendation) => (
                     <div
                       key={recommendation}
-                      className="flex gap-4 rounded-3xl bg-emerald-50/80 p-4 ring-1 ring-emerald-100"
+                      className="flex gap-4 rounded-3xl border border-emerald-100/80 bg-emerald-50/70 p-4 shadow-inner shadow-white/50 backdrop-blur"
                     >
                       <span className="mt-1 h-3 w-3 shrink-0 rounded-full bg-gradient-to-r from-emerald-500 to-lime-400" />
                       <p className="leading-7 text-slate-700">{recommendation}</p>
@@ -196,7 +196,7 @@ function WeatherAdvisory({ t }) {
 
               <motion.div
                 variants={cardReveal}
-                className="glow-card rounded-[2rem] border border-white/80 bg-slate-950 p-6 text-white shadow-2xl shadow-emerald-950/20"
+                className="glass-panel-dark glow-card rounded-[2rem] p-6 text-white"
               >
                 <p className="text-sm font-black uppercase tracking-[0.18em] text-lime-300">
                   {t.irrigationTitle}
@@ -205,7 +205,7 @@ function WeatherAdvisory({ t }) {
                 <p className="mt-4 leading-8 text-slate-300">
                   {t.irrigationText}
                 </p>
-                <div className="mt-6 rounded-3xl bg-white/10 p-5 ring-1 ring-white/10">
+                <div className="glass-inset mt-6 rounded-3xl p-5 text-white">
                   <p className="text-sm font-bold text-slate-300">{t.waterSaving}</p>
                   <p className="mt-2 text-4xl font-black text-lime-200">32%</p>
                 </div>

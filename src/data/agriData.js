@@ -21,9 +21,9 @@ export const features = [
     gradient: 'from-sky-500 to-emerald-500',
   },
   {
-    title: 'Telugu Language Support',
+    title: 'Multi-language Support',
     description:
-      'Use AgriAI comfortably with Telugu-friendly answers for local farming decisions.',
+      'Use AgriAI comfortably in Telugu, Hindi, Tamil, Kannada, Malayalam, and Marathi.',
     icon: 'TE',
     gradient: 'from-lime-500 to-yellow-400',
   },
