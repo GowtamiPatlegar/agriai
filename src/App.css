@@ -1,0 +1,336 @@
+.root-variables {
+  /* Theme variables for performant gradients and glow colors */
+}
+
+:root {
+  --bg-gradient-1: 135deg, #0f172a 0%, #052e16 100%;
+  --emerald-500: 34, 197, 94;
+  --lime-300: 132, 204, 22;
+  --accent-a: rgba(16, 185, 129, 0.9);
+  --accent-b: rgba(190, 242, 100, 0.92);
+  --glow-outer: 0 10px 30px rgba(16,185,129,0.08);
+}
+
+.smooth-transition {
+  transition-property: transform, box-shadow, opacity, background-color;
+  transition-duration: 280ms;
+  transition-timing-function: cubic-bezier(.2,.9,.2,1);
+  will-change: transform, opacity;
+}
+
+.gpu-accel {
+  transform: translateZ(0);
+  will-change: transform, opacity;
+}
+
+.pulse-soft {
+  animation: pulse-soft 2.6s ease-in-out infinite;
+}
+
+.glow-strong::before {
+  box-shadow: var(--glow-outer);
+  filter: blur(10px);
+}
+
+.micro-hover:hover {
+  transform: translateY(-3px) scale(1.01);
+}
+
+.animate-fade-up {
+  animation: fade-up 0.75s cubic-bezier(.2,.9,.2,1) both;
+}
+
+.section-reveal {
+  animation: fade-up 0.8s ease-out both;
+}
+
+.stagger-card {
+  animation: fade-up 0.7s ease-out both;
+}
+
+.float-soft {
+  animation: float-soft 6s ease-in-out infinite;
+}
+
+.animated-gradient {
+  background-size: 180% 180%;
+  animation: gradient-shift 8s ease infinite;
+}
+
+.button-lift {
+  position: relative;
+  overflow: hidden;
+  will-change: transform;
+}
+
+.button-lift::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    110deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.34) 45%,
+    transparent 60%
+  );
+  transform: translateX(-120%);
+  transition: transform 0.65s ease;
+}
+
+.button-lift:hover::after {
+  transform: translateX(120%);
+}
+
+.glow-card {
+  position: relative;
+}
+
+.glow-card::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  z-index: -1;
+  border-radius: inherit;
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.45), transparent 45%, rgba(190, 242, 100, 0.38));
+  opacity: 0;
+  transition: opacity 0.35s ease;
+}
+
+.glow-card:hover::before {
+  opacity: 1;
+}
+
+.shimmer {
+  position: relative;
+  overflow: hidden;
+}
+
+.shimmer::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    110deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.08) 35%,
+    rgba(255, 255, 255, 0.18) 50%,
+    transparent 70%
+  );
+  transform: translateX(-100%);
+  animation: shimmer 1.35s ease-in-out infinite;
+}
+
+.particle-field {
+  position: relative;
+  overflow: hidden;
+}
+
+.particle-field::before,
+.particle-field::after {
+  content: '';
+  position: absolute;
+  pointer-events: none;
+  border-radius: 999px 0 999px 999px;
+  background: rgba(34, 197, 94, 0.14);
+  filter: blur(0.2px);
+  transform: rotate(-28deg);
+  animation: drift-leaf 14s ease-in-out infinite;
+}
+
+.particle-field::before {
+  left: 8%;
+  top: 18%;
+  width: 18px;
+  height: 11px;
+}
+
+.particle-field::after {
+  right: 10%;
+  top: 62%;
+  width: 14px;
+  height: 9px;
+  animation-delay: -6s;
+}
+
+.animate-message {
+  animation: message-in 0.35s ease-out both;
+}
+
+.ai-orbit::before,
+.ai-orbit::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  border: 1px solid rgba(190, 242, 100, 0.42);
+  animation: orbit-pulse 1.8s ease-out infinite;
+}
+
+.ai-orbit::after {
+  animation-delay: 0.65s;
+}
+
+.scan-beam {
+  background: conic-gradient(
+    from 0deg,
+    transparent,
+    rgba(190, 242, 100, 0.16),
+    rgba(52, 211, 153, 0.9),
+    transparent 35%
+  );
+  animation: spin-scan 1.4s linear infinite;
+}
+
+.processing-bar {
+  width: 42%;
+  animation: process-sweep 1.15s ease-in-out infinite;
+}
+
+.ai-pulse::after {
+  content: '';
+  position: absolute;
+  inset: -5px;
+  border-radius: 1.25rem;
+  border: 1px solid rgba(34, 197, 94, 0.28);
+  animation: orbit-pulse 1.4s ease-out infinite;
+}
+
+.typing-dot {
+  animation: typing-dot 0.9s ease-in-out infinite;
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes orbit-pulse {
+  from {
+    opacity: 0.75;
+    transform: scale(0.82);
+  }
+
+  to {
+    opacity: 0;
+    transform: scale(1.28);
+  }
+}
+
+@keyframes spin-scan {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes process-sweep {
+  0% {
+    transform: translateX(-110%);
+  }
+
+  55% {
+    transform: translateX(70%);
+  }
+
+  100% {
+    transform: translateX(240%);
+  }
+}
+
+@keyframes typing-dot {
+  0%,
+  100% {
+    opacity: 0.35;
+    transform: translateY(0) scale(0.85);
+  }
+
+  50% {
+    opacity: 1;
+    transform: translateY(-3px) scale(1);
+  }
+}
+
+@keyframes float-soft {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-12px);
+  }
+}
+
+@keyframes gradient-shift {
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+@keyframes shimmer {
+  to {
+    transform: translateX(100%);
+  }
+}
+
+@keyframes drift-leaf {
+  0%,
+  100% {
+    opacity: 0.25;
+    transform: translate3d(0, 0, 0) rotate(-28deg);
+  }
+
+  50% {
+    opacity: 0.7;
+    transform: translate3d(18px, -22px, 0) rotate(8deg);
+  }
+}
+
+@keyframes message-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.98);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes pulse-soft {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.03);
+    opacity: 0.95;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+}
