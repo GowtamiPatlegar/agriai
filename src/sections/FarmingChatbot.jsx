@@ -4,7 +4,7 @@ import ChatMessage from '../components/ChatMessage'
 import TypingIndicator from '../components/TypingIndicator'
 import { cardReveal, sectionReveal, viewportSettings } from '../animations/motionVariants'
 import { sampleMessages } from '../data/agriData'
-import { getChatbotResponse } from '../services/mockAiService'
+import { getHuggingFaceChatbotResponse } from '../services/huggingFaceService'
 
 function FarmingChatbot({ t }) {
   const [messages, setMessages] = useState(sampleMessages)
@@ -30,15 +30,29 @@ function FarmingChatbot({ t }) {
     setInputValue('')
     setIsTyping(true)
 
-    const response = await getChatbotResponse()
-    const aiMessage = {
-      id: Date.now() + 1,
-      sender: 'ai',
-      text: response,
-    }
+    try {
+      const response = await getHuggingFaceChatbotResponse(question)
+      const aiMessage = {
+        id: Date.now() + 1,
+        sender: 'ai',
+        text: response,
+      }
 
-    setMessages((currentMessages) => [...currentMessages, aiMessage])
-    setIsTyping(false)
+      setMessages((currentMessages) => [...currentMessages, aiMessage])
+    } catch (error) {
+      console.error('Chatbot Hugging Face error:', error instanceof Error ? error.message : error)
+      console.error('Full chatbot error object:', error)
+
+      const fallbackMessage = {
+        id: Date.now() + 1,
+        sender: 'ai',
+        text: 'I could not reach the AI service right now. Please check your Hugging Face API key or internet connection, then try again. For urgent crop disease, fertilizer, irrigation, soil, or weather issues, contact a local agriculture officer.',
+      }
+
+      setMessages((currentMessages) => [...currentMessages, fallbackMessage])
+    } finally {
+      setIsTyping(false)
+    }
   }
 
   return (
