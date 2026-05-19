@@ -19,46 +19,46 @@ export const translations = {
     },
     hero: {
       eyebrow: 'AI-powered decisions for smarter farming',
-      title: 'Grow healthier crops with an intelligent agriculture dashboard.',
+      title: 'Manage every crop with an intelligent agriculture dashboard.',
       subtitle:
-        'AgriAI brings crop disease detection, weather advice, and a friendly farming assistant into one clean dashboard built for modern farmers.',
+        'AgriAI brings crop disease analysis, weather advice, and a farming assistant into one clean dashboard for rice, wheat, cotton, maize, chilli, sugarcane, vegetables, fruits, and more.',
       primaryCta: 'Explore Dashboard',
       secondaryCta: 'Ask AI Assistant',
       stats: ['AI Support', 'Smart Tools', 'Mobile Ready'],
     },
     disease: {
       eyebrow: 'Disease Detection',
-      title: 'Upload a leaf image for an instant AI crop health check.',
+      title: 'Upload a crop image for AI-powered disease analysis.',
       subtitle:
-        'Drag and drop a crop leaf photo, preview it, and run a sample AI analysis with disease confidence and treatment guidance.',
-      uploadTitle: 'Drop leaf image here',
+        'Drag and drop a clear crop photo, preview it, and run AI analysis for visible symptoms, disease confidence, and practical next steps.',
+      uploadTitle: 'Drop crop image here',
       uploadHelp:
-        'Supports JPG, PNG, and WEBP images. A clear leaf photo gives better AI predictions.',
+        'Supports JPG, PNG, and WEBP images. Clear photos of leaves, stems, fruits, or affected plant parts improve AI predictions.',
       browse: 'Browse Image',
       replaceHelp: 'Click or drop another image to replace this preview.',
-      analyze: 'Analyze Leaf Image',
-      analyzing: 'Analyzing Leaf...',
+      analyze: 'Analyze Crop Image',
+      analyzing: 'Analyzing Crop...',
       resultEyebrow: 'AI Result',
       reportTitle: 'Prediction Report',
       waitingTitle: 'Waiting for analysis',
       waitingText:
-        'Upload a leaf image and tap analyze to generate a sample AI disease prediction.',
+        'Upload a crop image and tap analyze to generate an AI disease assessment.',
       diseaseName: 'Disease Name',
       confidence: 'Confidence',
       treatment: 'Treatment Recommendation',
-      predictionName: 'Tomato Leaf Blight',
+      predictionName: 'Crop Stress or Disease Symptoms',
       recommendationText:
-        'Remove infected leaves, avoid overhead watering, and apply a copper-based organic fungicide in the evening.',
+        'Remove heavily affected plant parts where appropriate, reduce unnecessary leaf wetness, improve field airflow, and follow crop-specific guidance from a local agriculture expert.',
     },
     chatbot: {
       eyebrow: 'AI Farming Assistant',
-      title: 'Ask crop questions and get field-ready answers.',
+      title: 'Ask farming questions across crops and get field-ready answers.',
       subtitle:
-        'A modern agriculture chatbot for disease doubts, irrigation timing, fertilizer planning, and everyday farm decisions.',
+        'A modern agriculture chatbot for crop health, irrigation timing, fertilizer planning, soil care, weather risks, and everyday farm decisions.',
       chatTitle: 'AgriAI Chat',
       status: 'Online farming assistant',
       live: 'Live',
-      placeholder: 'Ask about crops, soil, fertilizer, weather...',
+      placeholder: 'Ask about rice, wheat, cotton, maize, chilli, sugarcane, vegetables, fruits...',
       send: 'Send',
       typingTitle: 'AgriAI is preparing advice',
       typingStatus: 'checking crop context',
@@ -70,7 +70,7 @@ export const translations = {
       eyebrow: 'Weather Advisory',
       title: 'Plan every farm task around smart weather signals.',
       subtitle:
-        'Sample farm weather dashboard with rainfall risk, moisture guidance, irrigation timing, and field recommendations.',
+        'Sample farm weather dashboard with rainfall risk, moisture guidance, irrigation timing, and recommendations that can scale across cereals, pulses, cash crops, vegetables, and fruit crops.',
       today: 'Today',
       forecast: 'Cloudy with evening showers',
       bestWindow: 'Best field window',
@@ -84,7 +84,7 @@ export const translations = {
       recommendations: [
         'Delay pesticide spraying until rainfall chance drops below 30%.',
         'Check low-lying areas for waterlogging after evening showers.',
-        'Mulch vegetable beds to protect soil moisture during warm hours.',
+        'Protect soil moisture with mulching or residue cover where suitable for the crop.',
       ],
     },
     language: {
@@ -96,7 +96,7 @@ export const translations = {
       sampleBadge: 'Farming Text',
       sampleTitle: 'Smart Farming Guidance',
       sampleText:
-        'Water your crop early in the morning, monitor leaf color twice a week, and avoid spraying pesticides before rainfall.',
+        'Check crop growth regularly, track soil moisture, and avoid spraying pesticides before rainfall.',
       sampleTip: 'Tip: Healthy soil moisture helps roots absorb nutrients better.',
     },
   },

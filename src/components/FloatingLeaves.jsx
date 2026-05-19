@@ -1,5 +1,7 @@
 import { motion } from 'framer-motion'
 
+const leafPositions = [-12, 28, 8, 42, -4, 36, 18, 50]
+
 export default function FloatingLeaves() {
   const leaves = Array.from({ length: 8 })
 
@@ -11,7 +13,7 @@ export default function FloatingLeaves() {
           className="absolute"
           style={{
             left: `${(idx * 100) / 8}%`,
-            top: `${Math.random() * 60 - 20}%`,
+            top: `${leafPositions[idx]}%`,
             opacity: 0.15,
           }}
           animate={{

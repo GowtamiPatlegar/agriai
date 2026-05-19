@@ -11,7 +11,7 @@ function FeaturesSection() {
       whileInView="visible"
       viewport={viewportSettings}
       id="features"
-      className="particle-field border-t border-emerald-300/10 bg-[radial-gradient(circle_at_top_right,#14532d,transparent_30%),linear-gradient(135deg,#020617_0%,#0f172a_48%,#052e16_100%)] px-5 py-20 sm:px-8"
+      className="particle-field border-t border-emerald-300/10 bg-[radial-gradient(circle_at_top_right,#14532d,transparent_30%),linear-gradient(135deg,#020617_0%,#0f172a_48%,#052e16_100%)] px-4 py-12 sm:px-6 sm:py-16 md:px-8 lg:py-20"
     >
       <div className="mx-auto w-full max-w-7xl">
         <motion.div variants={cardReveal} className="mb-10 max-w-2xl">

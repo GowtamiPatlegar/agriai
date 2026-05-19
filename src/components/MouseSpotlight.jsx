@@ -1,16 +1,16 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 export default function MouseSpotlight() {
   const spotlightRef = useRef(null)
-  const isMobileRef = useRef(false)
-
-  useEffect(() => {
-    // Detect if device is mobile
-    isMobileRef.current = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+  const [isMobile] = useState(() => (
+    typeof navigator !== 'undefined'
+    && /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
       navigator.userAgent
     )
+  ))
 
-    if (isMobileRef.current) return // Disable on mobile
+  useEffect(() => {
+    if (isMobile) return
 
     const spotlight = spotlightRef.current
     if (!spotlight) return
@@ -46,9 +46,9 @@ export default function MouseSpotlight() {
         cancelAnimationFrame(animationFrameId)
       }
     }
-  }, [])
+  }, [isMobile])
 
-  if (isMobileRef.current) return null
+  if (isMobile) return null
 
   return (
     <div

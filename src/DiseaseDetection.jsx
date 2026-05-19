@@ -3,10 +3,10 @@ import { motion } from 'framer-motion'
 import { cardReveal, sectionReveal, viewportSettings } from './motionVariants'
 
 const prediction = {
-  diseaseName: 'Tomato Leaf Blight',
+  diseaseName: 'Crop Stress or Disease Symptoms',
   confidence: 94,
   recommendation:
-    'Remove infected leaves, avoid overhead watering, and apply a copper-based organic fungicide in the evening.',
+    'Remove heavily affected plant parts where appropriate, reduce unnecessary leaf wetness, and consult a local agriculture expert for crop-specific treatment.',
 }
 
 function UploadIcon() {
@@ -35,7 +35,7 @@ function UploadIcon() {
 }
 
 function AIProcessingLoader() {
-  const steps = ['Scanning leaf texture', 'Detecting spot patterns', 'Matching crop model']
+  const steps = ['Scanning crop symptoms', 'Detecting visual stress patterns', 'Matching multi-crop model']
 
   return (
     <div className="rounded-3xl border border-white/10 bg-white/5 p-6">
@@ -59,10 +59,10 @@ function AIProcessingLoader() {
             </svg>
           </div>
         </div>
-        <h3 className="text-2xl font-black">AI is analyzing your leaf</h3>
+        <h3 className="text-2xl font-black">AI is analyzing your crop image</h3>
         <p className="mt-2 max-w-sm leading-7 text-slate-300">
-          Extracting visual symptoms and comparing them with sample crop disease
-          patterns.
+          Extracting visual symptoms and comparing them with multi-crop disease
+          and stress patterns.
         </p>
       </div>
 
@@ -124,7 +124,7 @@ function DiseaseDetection() {
     handleImage(event.dataTransfer.files[0])
   }
 
-  function analyzeLeaf() {
+  function analyzeCropImage() {
     if (!imagePreview) {
       return
     }
@@ -144,26 +144,26 @@ function DiseaseDetection() {
       initial="hidden"
       whileInView="visible"
       viewport={viewportSettings}
-      className="particle-field border-y border-emerald-100/80 bg-[radial-gradient(circle_at_top_right,#dcfce7,transparent_28%),linear-gradient(180deg,#ffffff_0%,#f8fafc_100%)] px-5 py-20 text-slate-900 sm:px-8 lg:py-24"
+      className="particle-field border-y border-emerald-100/80 bg-[radial-gradient(circle_at_top_right,#dcfce7,transparent_28%),linear-gradient(180deg,#ffffff_0%,#f8fafc_100%)] px-4 py-12 text-slate-900 sm:px-6 sm:py-16 md:px-8 lg:py-24"
     >
       <div className="section-reveal mx-auto max-w-6xl">
         <motion.div variants={cardReveal} className="mb-10 max-w-3xl">
           <p className="text-sm font-black uppercase tracking-[0.18em] text-emerald-600">
             Disease Detection
           </p>
-          <h1 className="mt-3 text-4xl font-black leading-tight text-slate-950 sm:text-5xl">
-            Upload a leaf image for an instant AI crop health check.
+          <h1 className="mt-3 text-3xl font-black leading-tight text-slate-950 sm:text-4xl md:text-5xl">
+            Upload a crop image for AI-powered disease analysis.
           </h1>
-          <p className="mt-5 text-lg leading-8 text-slate-600">
-            Drag and drop a crop leaf photo, preview it, and run a sample AI
-            analysis with disease confidence and treatment guidance.
+          <p className="mt-4 text-base leading-7 text-slate-600 sm:mt-5 sm:text-lg sm:leading-8">
+            Drag and drop a clear crop photo, preview it, and run AI analysis
+            for visible symptoms, disease confidence, and practical next steps.
           </p>
         </motion.div>
 
         <motion.div variants={sectionReveal} className="grid gap-6 lg:grid-cols-[1.05fr_0.95fr]">
           <motion.div
             variants={cardReveal}
-            className="glow-card stagger-card rounded-[2rem] border border-white/80 bg-white/85 p-5 shadow-2xl shadow-emerald-950/10 backdrop-blur"
+            className="glow-card stagger-card rounded-[1.5rem] border border-white/80 bg-white/85 p-3 shadow-2xl shadow-emerald-950/10 backdrop-blur sm:rounded-[2rem] sm:p-5"
           >
             <label
               onDragOver={(event) => {
@@ -172,7 +172,7 @@ function DiseaseDetection() {
               }}
               onDragLeave={() => setIsDragging(false)}
               onDrop={handleDrop}
-              className={`group flex min-h-[420px] cursor-pointer flex-col items-center justify-center rounded-[1.5rem] border-2 border-dashed p-6 text-center transition duration-300 ${
+              className={`group flex min-h-[300px] cursor-pointer flex-col items-center justify-center rounded-[1.25rem] border-2 border-dashed p-4 text-center transition duration-300 sm:min-h-[360px] sm:rounded-[1.5rem] sm:p-6 lg:min-h-[420px] ${
                 isDragging
                   ? 'scale-[1.01] border-emerald-500 bg-emerald-50 shadow-inner'
                   : 'border-emerald-200 bg-gradient-to-br from-white to-emerald-50/70 hover:-translate-y-1 hover:border-emerald-400 hover:shadow-xl hover:shadow-emerald-900/10'
@@ -190,8 +190,8 @@ function DiseaseDetection() {
                   <div className="overflow-hidden rounded-3xl border border-emerald-100 bg-white shadow-lg">
                     <img
                       src={imagePreview}
-                      alt="Uploaded leaf preview"
-                      className="h-72 w-full object-cover transition duration-500 group-hover:scale-105 sm:h-96"
+                      alt="Uploaded crop preview"
+                      className="aspect-[4/3] max-h-[60dvh] w-full object-cover transition duration-500 group-hover:scale-105"
                     />
                   </div>
                   <p className="mt-5 text-sm font-bold text-emerald-700">
@@ -207,11 +207,11 @@ function DiseaseDetection() {
                     <UploadIcon />
                   </div>
                   <h2 className="text-2xl font-black text-slate-950">
-                    Drop leaf image here
+                    Drop crop image here
                   </h2>
                   <p className="mt-3 leading-7 text-slate-600">
-                    Supports JPG, PNG, and WEBP images. A clear leaf photo gives
-                    better AI predictions.
+                    Supports JPG, PNG, and WEBP images. Clear photos of leaves,
+                    stems, fruits, or affected plant parts improve AI predictions.
                   </p>
                   <span className="button-lift mt-6 inline-flex rounded-full bg-emerald-600 px-5 py-3 text-sm font-bold text-white shadow-lg shadow-emerald-700/25 transition group-hover:bg-emerald-700">
                     Browse Image
@@ -222,17 +222,17 @@ function DiseaseDetection() {
 
             <button
               type="button"
-              onClick={analyzeLeaf}
+              onClick={analyzeCropImage}
               disabled={!imagePreview || isAnalyzing}
               className="button-lift animated-gradient mt-5 w-full rounded-2xl bg-gradient-to-r from-emerald-600 to-lime-500 px-6 py-4 text-base font-black text-white shadow-xl shadow-emerald-700/25 transition hover:-translate-y-1 hover:shadow-2xl disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:translate-y-0"
             >
-              {isAnalyzing ? 'Analyzing Leaf...' : 'Analyze Leaf Image'}
+              {isAnalyzing ? 'Analyzing Crop...' : 'Analyze Crop Image'}
             </button>
           </motion.div>
 
           <motion.div
             variants={cardReveal}
-            className="glow-card stagger-card rounded-[2rem] border border-white/80 bg-slate-950 p-6 text-white shadow-2xl shadow-emerald-950/20 [animation-delay:120ms]"
+            className="glow-card stagger-card rounded-[1.5rem] border border-white/80 bg-slate-950 p-4 text-white shadow-2xl shadow-emerald-950/20 [animation-delay:120ms] sm:rounded-[2rem] sm:p-6"
           >
             <div className="mb-8 flex items-center justify-between">
               <div>
@@ -249,12 +249,12 @@ function DiseaseDetection() {
             )}
 
             {!isAnalyzing && !result && (
-              <div className="flex min-h-[360px] flex-col items-center justify-center rounded-3xl border border-white/10 bg-white/5 p-8 text-center">
+              <div className="flex min-h-[260px] flex-col items-center justify-center rounded-3xl border border-white/10 bg-white/5 p-5 text-center sm:min-h-[320px] sm:p-8 lg:min-h-[360px]">
                 <div className="mb-5 h-16 w-16 rounded-full border-4 border-emerald-300/30 border-t-lime-300" />
                 <h3 className="text-2xl font-black">Waiting for analysis</h3>
                 <p className="mt-3 leading-7 text-slate-300">
-                  Upload a leaf image and tap analyze to generate a sample AI
-                  disease prediction.
+                  Upload a crop image and tap analyze to generate an AI disease
+                  assessment.
                 </p>
               </div>
             )}

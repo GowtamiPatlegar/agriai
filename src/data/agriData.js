@@ -2,7 +2,7 @@ export const features = [
   {
     title: 'Disease Detection',
     description:
-      'Upload crop leaf images and get fast AI-powered insights for early disease action.',
+      'Upload crop images and get fast AI-powered insights for early disease action across major crops.',
     icon: 'DI',
     gradient: 'from-emerald-500 to-lime-500',
   },
@@ -11,21 +11,21 @@ export const features = [
     description:
       'Ask crop, soil, fertilizer, and irrigation questions with simple field-ready guidance.',
     icon: 'AI',
-    gradient: 'from-green-500 to-teal-500',
+    gradient: 'from-emerald-600 to-lime-400',
   },
   {
     title: 'Weather Advisory',
     description:
       'Plan farm work with timely weather alerts, rainfall hints, and seasonal recommendations.',
     icon: 'WX',
-    gradient: 'from-sky-500 to-emerald-500',
+    gradient: 'from-emerald-700 to-lime-400',
   },
   {
-    title: 'Multi-language Support',
+    title: 'Multilingual Support',
     description:
-      'Use AgriAI comfortably in Telugu, Hindi, Tamil, Kannada, Malayalam, and Marathi.',
-    icon: 'TE',
-    gradient: 'from-lime-500 to-yellow-400',
+      'Use AgriAI comfortably across Telugu, Hindi, Tamil, Kannada, Malayalam, and Marathi.',
+    icon: 'ML',
+    gradient: 'from-lime-400 to-emerald-500',
   },
 ]
 
@@ -36,42 +36,42 @@ export const stats = [
 ]
 
 export const diseasePrediction = {
-  diseaseName: 'Tomato Leaf Blight',
+  diseaseName: 'Crop Stress or Disease Symptoms',
   confidence: 94,
   recommendation:
-    'Remove infected leaves, avoid overhead watering, and apply a copper-based organic fungicide in the evening.',
+    'Remove heavily affected plant parts where appropriate, reduce unnecessary leaf wetness, and consult a local agriculture expert for crop-specific treatment.',
 }
 
 export const sampleMessages = [
   {
     id: 1,
     sender: 'farmer',
-    text: 'My tomato leaves have yellow spots. What should I do?',
+    text: 'My crop leaves have yellow spots. What should I check first?',
   },
   {
     id: 2,
     sender: 'ai',
-    text: 'Yellow spots can indicate early blight or nutrient stress. Remove affected leaves, avoid watering the leaves directly, and check soil drainage.',
+    text: 'Yellow spots can come from disease, nutrient stress, or water imbalance. Check recent weather, soil moisture, leaf pattern, and spread before choosing treatment.',
   },
   {
     id: 3,
     sender: 'farmer',
-    text: 'When is the best time to irrigate paddy fields?',
+    text: 'How should I plan irrigation for rice, wheat, maize, or vegetables?',
   },
   {
     id: 4,
     sender: 'ai',
-    text: 'Irrigate early morning or evening to reduce water loss. Keep shallow standing water during active growth, but drain before harvest.',
+    text: 'Use crop stage, soil type, and weather as the guide. Irrigate early morning or evening, avoid water stress during flowering, and reduce watering before expected rain.',
   },
   {
     id: 5,
     sender: 'farmer',
-    text: 'Which fertilizer is good for chilli plants after flowering?',
+    text: 'How do I plan fertilizer after flowering or active growth?',
   },
   {
     id: 6,
     sender: 'ai',
-    text: 'After flowering, use balanced potassium-rich nutrition. Avoid excess nitrogen because it can increase leaves but reduce fruit quality.',
+    text: 'Match fertilizer to the crop and growth stage. Many crops need balanced nitrogen, phosphorus, and potassium, while fruiting vegetables and cotton often need careful potassium management.',
   },
 ]
 
@@ -81,14 +81,14 @@ export const weatherMetrics = [
     value: '29 C',
     note: 'Warm and stable',
     icon: 'sun',
-    gradient: 'from-amber-400 to-lime-500',
+    gradient: 'from-lime-300 to-emerald-500',
   },
   {
     label: 'Humidity',
     value: '74%',
     note: 'High moisture',
     icon: 'drop',
-    gradient: 'from-sky-400 to-emerald-500',
+    gradient: 'from-emerald-300 to-emerald-600',
   },
   {
     label: 'Rainfall Chance',
@@ -109,7 +109,7 @@ export const weatherMetrics = [
 export const recommendations = [
   'Delay pesticide spraying until rainfall chance drops below 30%.',
   'Check low-lying areas for waterlogging after evening showers.',
-  'Mulch vegetable beds to protect soil moisture during warm hours.',
+  'Use mulch, residue cover, or shallow cultivation where suitable to protect soil moisture.',
 ]
 
 export const translations = {
@@ -117,7 +117,7 @@ export const translations = {
     badge: 'English',
     short: 'EN',
     title: 'Smart Farming Guidance',
-    text: 'Water your crop early in the morning, monitor leaf color twice a week, and avoid spraying pesticides before rainfall.',
+    text: 'Check crop growth regularly, track soil moisture, and avoid spraying pesticides before rainfall.',
     tip: 'Tip: Healthy soil moisture helps roots absorb nutrients better.',
   },
   telugu: {

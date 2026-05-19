@@ -1,9 +1,9 @@
 import { motion } from 'framer-motion'
 
 const processingSteps = [
-  'Scanning leaf texture',
-  'Detecting spot patterns',
-  'Matching crop model',
+  'Scanning crop symptoms',
+  'Detecting visual stress patterns',
+  'Matching multi-crop model',
 ]
 
 function AIProcessingLoader() {
@@ -41,8 +41,8 @@ function AIProcessingLoader() {
           Analyzing crop health using AI...
         </h3>
         <p className="mt-2 max-w-sm leading-7 text-slate-300">
-          Extracting visual symptoms and comparing them with sample crop disease
-          patterns.
+          Extracting visual symptoms and comparing them with multi-crop disease
+          and stress patterns.
         </p>
       </div>
 

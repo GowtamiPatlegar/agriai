@@ -1,8 +1,10 @@
 import { motion } from 'framer-motion'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 export default function PremiumNavbar({ t }) {
   const [hoveredItem, setHoveredItem] = useState(null)
+  const [activeItem, setActiveItem] = useState('features')
+  const [isCompact, setIsCompact] = useState(false)
 
   const navItems = [
     { key: 'features', label: t.features },
@@ -10,24 +12,47 @@ export default function PremiumNavbar({ t }) {
     { key: 'advisory', label: t.advisory },
   ]
 
+  useEffect(() => {
+    const sectionKeys = ['features', 'assistant', 'advisory']
+
+    const handleScroll = () => {
+      setIsCompact(window.scrollY > 48)
+
+      const current = sectionKeys
+        .map((key) => ({ key, section: document.getElementById(key) }))
+        .filter(({ section }) => section && section.getBoundingClientRect().top <= 180)
+        .at(-1)
+
+      if (current) {
+        setActiveItem(current.key)
+      }
+    }
+
+    handleScroll()
+    window.addEventListener('scroll', handleScroll, { passive: true })
+
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
+
   const containerVariants = {
-    hidden: { opacity: 0, y: -20 },
+    hidden: { opacity: 0, y: -22, scale: 0.98 },
     visible: {
       opacity: 1,
       y: 0,
+      scale: 1,
       transition: {
-        duration: 0.6,
+        duration: 0.72,
         ease: [0.2, 0.9, 0.2, 1],
       },
     },
   }
 
   const logoVariants = {
-    hidden: { scale: 0, opacity: 0 },
+    hidden: { scale: 0.84, opacity: 0 },
     visible: {
       scale: 1,
       opacity: 1,
-      transition: { duration: 0.5, delay: 0.1 },
+      transition: { duration: 0.5, delay: 0.12 },
     },
   }
 
@@ -37,8 +62,8 @@ export default function PremiumNavbar({ t }) {
       opacity: 1,
       y: 0,
       transition: {
-        duration: 0.4,
-        delay: 0.15 + i * 0.08,
+        duration: 0.42,
+        delay: 0.18 + i * 0.07,
         ease: [0.2, 0.9, 0.2, 1],
       },
     }),
@@ -49,158 +74,123 @@ export default function PremiumNavbar({ t }) {
       variants={containerVariants}
       initial="hidden"
       animate="visible"
-      className="fixed top-0 left-0 right-0 z-50 mx-auto flex w-full items-center justify-between px-5 py-4 sm:px-8"
+      className="fixed left-0 right-0 top-2 z-50 mx-auto hidden w-full px-3 transition-all duration-300 sm:top-4 sm:px-5 md:block md:top-5 md:px-6"
     >
-      {/* Glassmorphism Background */}
-      <div
-        className="absolute inset-0 glass-panel -z-10 rounded-3xl mx-5 sm:mx-8 my-3"
-        style={{
-          boxShadow:
-            '0 8px 32px rgba(16, 185, 129, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.2)',
+      <motion.div
+        animate={{
+          scale: isCompact ? 0.985 : 1,
+          y: isCompact ? -6 : 0,
         }}
-      />
-
-      {/* Logo & Branding */}
-      <motion.a
-        href="#"
-        variants={logoVariants}
-        className="flex items-center gap-3 relative z-10"
+        transition={{ duration: 0.28, ease: [0.2, 0.9, 0.2, 1] }}
+        className={`premium-navbar-shell mx-auto flex w-full max-w-7xl flex-col gap-2 px-3 sm:px-5 md:flex-row md:items-center md:justify-between md:gap-4 ${
+          isCompact ? 'py-2 shadow-emerald-950/10' : 'py-2.5 sm:py-3'
+        }`}
       >
-        {/* Animated AI Orb */}
-        <motion.div
-          className="relative h-12 w-12 flex items-center justify-center"
-          animate={{ scale: [1, 1.05, 1] }}
-          transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
-        >
-          {/* Outer glow ring */}
-          <motion.div
-            className="absolute inset-0 rounded-full"
-            style={{
-              background:
-                'radial-gradient(circle at 30% 30%, rgba(16, 185, 129, 0.4), transparent 70%)',
-              filter: 'blur(8px)',
-            }}
-            animate={{ scale: [1, 1.2, 1] }}
-            transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
-          />
+        <div className="premium-navbar-sheen" aria-hidden="true" />
 
-          {/* Middle pulsing ring */}
-          <motion.div
-            className="absolute inset-1 rounded-full border-2 border-emerald-500/30"
-            animate={{ rotate: [0, 360] }}
-            transition={{ duration: 8, repeat: Infinity, linear: true }}
-          />
-
-          {/* Core orb */}
-          <motion.div
-            className="relative h-9 w-9 rounded-full bg-gradient-to-br from-emerald-400 to-teal-600 shadow-lg shadow-emerald-500/50"
-            animate={{
-              boxShadow: [
-                '0 0 20px rgba(16, 185, 129, 0.6)',
-                '0 0 40px rgba(16, 185, 129, 0.8)',
-                '0 0 20px rgba(16, 185, 129, 0.6)',
-              ],
-            }}
-            transition={{ duration: 2.5, repeat: Infinity, ease: 'easeInOut' }}
-          >
-            {/* Inner shine */}
-            <div className="absolute inset-0 rounded-full bg-gradient-to-br from-emerald-300/60 to-transparent" />
-          </motion.div>
-
-          {/* Floating particles around orb */}
-          {[0, 1, 2].map((i) => (
-            <motion.div
-              key={i}
-              className="absolute w-1 h-1 bg-emerald-400/60 rounded-full"
-              animate={{
-                x: Math.cos((i * 2 * Math.PI) / 3) * 20,
-                y: Math.sin((i * 2 * Math.PI) / 3) * 20,
-              }}
-              transition={{
-                duration: 4,
-                repeat: Infinity,
-                ease: 'easeInOut',
-                delay: i * 0.4,
-              }}
-            />
-          ))}
-        </motion.div>
-
-        {/* Gradient Text */}
-        <div className="relative z-10">
-          <span className="text-xl font-black tracking-tight bg-gradient-to-r from-emerald-600 via-green-600 to-teal-600 bg-clip-text text-transparent drop-shadow-sm">
-            AgriAI
-          </span>
-          <div className="text-xs font-semibold text-emerald-600 tracking-wide">
-            Smart Farming
-          </div>
-        </div>
-      </motion.a>
-
-      {/* Navigation Items */}
-      <motion.div className="hidden items-center gap-8 md:flex relative z-10">
-        {navItems.map((item, i) => (
+        <div className="flex min-w-0 items-center justify-between gap-3">
           <motion.a
-            key={item.key}
-            custom={i}
-            variants={itemVariants}
-            initial="hidden"
-            animate="visible"
-            href={`#${item.key}`}
-            onMouseEnter={() => setHoveredItem(i)}
-            onMouseLeave={() => setHoveredItem(null)}
-            className="relative group text-sm font-semibold text-slate-700 transition-colors duration-300"
+            href="#"
+            variants={logoVariants}
+            className="group relative z-10 flex min-w-0 items-center gap-2 sm:gap-3"
+            aria-label="AgriAI home"
           >
-            <span className="relative">
-              {item.label}
-              {/* Underline animation */}
-              <motion.div
-                className="absolute bottom-0 left-0 h-0.5 bg-gradient-to-r from-emerald-500 to-teal-500"
-                initial={{ width: 0 }}
-                animate={{ width: hoveredItem === i ? '100%' : 0 }}
-                transition={{ duration: 0.3, ease: 'easeOut' }}
-              />
+            <motion.span
+              className="nav-ai-orb"
+              aria-hidden="true"
+            >
+              <span className="nav-ai-orb-core">AI</span>
+            </motion.span>
+
+            <span className="relative z-10 min-w-0">
+              <span className="block bg-gradient-to-r from-emerald-500 via-lime-500 to-teal-500 bg-clip-text text-xl font-black tracking-tight text-transparent sm:text-2xl md:text-3xl">
+                AgriAI
+              </span>
+              <span className="block text-[0.56rem] font-bold uppercase tracking-[0.18em] text-emerald-800/70 sm:text-[0.66rem] sm:tracking-[0.28em]">
+                Neural Farming
+              </span>
             </span>
           </motion.a>
-        ))}
-      </motion.div>
 
-      {/* Right Side: Live Badge + CTA Button */}
-      <div className="flex items-center gap-4 relative z-10">
-        {/* Live AI Badge */}
-        <motion.div
-          className="hidden sm:flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-emerald-50 to-teal-50 border border-emerald-200/60 backdrop-blur-sm"
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.5, delay: 0.3 }}
-        >
           <motion.div
-            className="w-2 h-2 rounded-full bg-emerald-500"
-            animate={{ scale: [1, 1.3, 1], opacity: [1, 0.6, 1] }}
-            transition={{ duration: 1.5, repeat: Infinity }}
-          />
-          <span className="text-xs font-bold text-emerald-700">Live AI</span>
+            className="ai-online-badge flex md:hidden"
+            initial={{ opacity: 0, scale: 0.86 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.45, delay: 0.28 }}
+          >
+            <span className="ai-online-dot" aria-hidden="true" />
+            <span>AI Online</span>
+          </motion.div>
+        </div>
+
+        <motion.div className="relative z-10 flex min-w-0 items-center justify-between gap-2 md:justify-end md:gap-3">
+          <div className="flex min-w-0 flex-1 items-center gap-1 rounded-full border border-white/50 bg-white/35 p-1 shadow-inner shadow-white/60 md:flex-none md:gap-2 md:bg-white/20">
+            {navItems.map((item, i) => {
+              const isActive = activeItem === item.key
+              const isHovered = hoveredItem === i
+
+              return (
+                <motion.a
+                  key={item.key}
+                  custom={i}
+                  variants={itemVariants}
+                  initial="hidden"
+                  animate="visible"
+                  href={`#${item.key}`}
+                  onMouseEnter={() => setHoveredItem(i)}
+                  onMouseLeave={() => setHoveredItem(null)}
+                  onFocus={() => setHoveredItem(i)}
+                  onBlur={() => setHoveredItem(null)}
+                  className="premium-nav-link"
+                >
+                  <motion.span
+                    animate={{
+                      y: isHovered ? -1 : 0,
+                      color: isActive || isHovered ? '#047857' : '#334155',
+                    }}
+                    transition={{ duration: 0.22 }}
+                  >
+                    {item.label}
+                  </motion.span>
+                  {(isActive || isHovered) && (
+                    <motion.span
+                      className="premium-nav-underline"
+                      layoutId="active-nav-underline"
+                      transition={{
+                        type: 'spring',
+                        stiffness: 420,
+                        damping: 32,
+                      }}
+                    />
+                  )}
+                </motion.a>
+              )
+            })}
+          </div>
+
+          <motion.div
+            className="ai-online-badge hidden md:flex"
+            initial={{ opacity: 0, scale: 0.86 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.45, delay: 0.32 }}
+          >
+            <span className="ai-online-dot" aria-hidden="true" />
+            <span>AI Online</span>
+          </motion.div>
+
+          <motion.a
+            href="#features"
+            initial={{ opacity: 0, scale: 0.86 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.45, delay: 0.38 }}
+            whileHover={{ scale: 1.04, y: -2 }}
+            whileTap={{ scale: 0.97 }}
+            className="premium-nav-cta hidden sm:inline-flex"
+          >
+            <span>{t.getStarted}</span>
+          </motion.a>
         </motion.div>
-
-        {/* CTA Button */}
-        <motion.a
-          href="#features"
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.5, delay: 0.35 }}
-          whileHover={{ scale: 1.05, y: -2 }}
-          whileTap={{ scale: 0.95 }}
-          className="relative overflow-hidden px-6 py-2.5 rounded-full font-semibold text-white text-sm bg-gradient-to-r from-emerald-600 to-teal-600 shadow-lg shadow-emerald-500/40 hover:shadow-xl hover:shadow-emerald-500/50 transition-shadow"
-        >
-          {/* Shine effect */}
-          <motion.div
-            className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent"
-            animate={{ x: ['-100%', '100%'] }}
-            transition={{ duration: 3, repeat: Infinity }}
-          />
-          <span className="relative">{t.getStarted}</span>
-        </motion.a>
-      </div>
+      </motion.div>
     </motion.nav>
   )
 }

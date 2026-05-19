@@ -4,11 +4,11 @@ function TypingIndicator({ title, status }) {
   return (
     <motion.div
       layout
-      initial={{ opacity: 0, y: 18, scale: 0.97, filter: 'blur(4px)' }}
+      initial={{ opacity: 0, y: 14, scale: 0.98 }}
       animate={{ opacity: 1, y: 0, scale: 1 }}
-      exit={{ opacity: 0, y: -12, scale: 0.98, filter: 'blur(3px)' }}
+      exit={{ opacity: 0, y: -10, scale: 0.99 }}
       transition={{ duration: 0.38, ease: [0.22, 1, 0.36, 1] }}
-      className="animate-message max-w-[82%] rounded-3xl rounded-bl-md border border-emerald-300/15 bg-white/8 px-4 py-4 text-slate-100 shadow-lg shadow-emerald-950/20 backdrop-blur ring-1 ring-white/10 sm:max-w-[72%]"
+      className="animate-message max-w-[92%] rounded-3xl rounded-bl-md border border-emerald-200/20 bg-slate-900/92 px-4 py-4 text-slate-50 shadow-md shadow-emerald-950/20 ring-1 ring-white/8 sm:max-w-[78%] lg:max-w-[72%]"
     >
       <div className="flex items-center gap-3">
         <span className="assistant-avatar relative flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-emerald-400 to-lime-300 text-slate-950 shadow-lg shadow-emerald-300/20">
