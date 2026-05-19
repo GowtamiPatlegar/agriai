@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion'
+import { Link } from 'react-router-dom'
 import FloatingLeaves from '../components/FloatingLeaves'
 import HeroVisual from '../components/HeroVisual'
 import { stats } from '../data/agriData'
@@ -52,22 +53,28 @@ function HeroSection({ t }) {
         </motion.p>
 
         <motion.div variants={cardReveal} className="mt-8 flex flex-col gap-4 sm:flex-row">
-          <motion.a
-            href="#features"
+          <motion.div
             whileHover={{ y: -4, scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
-            className="button-lift animated-gradient rounded-full bg-gradient-to-r from-emerald-600 to-lime-500 px-7 py-4 text-center font-bold text-white shadow-xl shadow-emerald-700/25 transition hover:-translate-y-1 hover:shadow-2xl hover:shadow-emerald-700/30"
           >
-            {t.primaryCta}
-          </motion.a>
-          <motion.a
-            href="#assistant"
+            <Link
+              to="/disease"
+              className="button-lift animated-gradient block rounded-full bg-gradient-to-r from-emerald-600 to-lime-500 px-7 py-4 text-center font-bold text-white shadow-xl shadow-emerald-700/25 transition hover:-translate-y-1 hover:shadow-2xl hover:shadow-emerald-700/30"
+            >
+              {t.primaryCta}
+            </Link>
+          </motion.div>
+          <motion.div
             whileHover={{ y: -4, scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
-            className="hero-secondary-cta button-lift rounded-full px-7 py-4 text-center font-bold text-emerald-900 transition"
           >
-            {t.secondaryCta}
-          </motion.a>
+            <Link
+              to="/assistant"
+              className="hero-secondary-cta button-lift block rounded-full px-7 py-4 text-center font-bold text-emerald-900 transition"
+            >
+              {t.secondaryCta}
+            </Link>
+          </motion.div>
         </motion.div>
 
         <motion.div variants={sectionReveal} className="mt-8 grid max-w-xl grid-cols-1 gap-3 min-[420px]:grid-cols-3 sm:mt-10 sm:gap-4">

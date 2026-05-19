@@ -1,20 +1,22 @@
 import { useState } from 'react'
+import { AnimatePresence, motion } from 'framer-motion'
+import { Navigate, Route, Routes, useLocation } from 'react-router-dom'
 import './App.css'
-import AnimatedStatsStrip from './components/AnimatedStatsStrip'
 import LeafCursorTrail from './components/LeafCursorTrail'
 import MobileBottomNav from './components/MobileBottomNav'
 import MouseSpotlight from './components/MouseSpotlight'
 import PremiumNavbar from './components/PremiumNavbar'
+import ScrollToTop from './components/ScrollToTop'
 import { translations } from './data/translations'
-import DiseaseDetection from './sections/DiseaseDetection'
-import FarmingChatbot from './sections/FarmingChatbot'
-import FeaturesSection from './sections/FeaturesSection'
-import HeroSection from './sections/HeroSection'
-import LanguageToggle from './sections/LanguageToggle'
-import WeatherAdvisory from './sections/WeatherAdvisory'
+import AboutPage from './pages/AboutPage'
+import AssistantPage from './pages/AssistantPage'
+import DiseasePage from './pages/DiseasePage'
+import HomePage from './pages/HomePage'
+import WeatherPage from './pages/WeatherPage'
 
 function App() {
   const [language, setLanguage] = useState('en')
+  const location = useLocation()
   const t = translations[language]
 
   return (
@@ -22,28 +24,39 @@ function App() {
       <div className="aurora-background" aria-hidden="true" />
       <MouseSpotlight />
       <LeafCursorTrail />
+      <ScrollToTop />
 
-      {/* Premium Fixed Navbar */}
       <PremiumNavbar t={t.nav} />
       <MobileBottomNav />
 
-      {/* Animated Stats Strip */}
-      <AnimatedStatsStrip />
-
       <div className="relative z-10 pt-6 sm:pt-10 md:pt-36">
-        <div className="particle-field bg-[radial-gradient(circle_at_top_left,#dcfce7,transparent_34%),linear-gradient(135deg,rgba(255,255,255,0.88)_0%,rgba(240,253,244,0.78)_48%,rgba(248,250,252,0.86)_100%)]">
-          <HeroSection t={t.hero} />
-        </div>
-
-        <DiseaseDetection t={t.disease} />
-        <FarmingChatbot t={t.chatbot} />
-        <WeatherAdvisory t={t.weather} />
-        <LanguageToggle
-          language={language}
-          onLanguageChange={setLanguage}
-          t={t.language}
-        />
-        <FeaturesSection />
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={location.pathname}
+            initial={{ opacity: 0, y: 18 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -12 }}
+            transition={{ duration: 0.28, ease: [0.2, 0.9, 0.2, 1] }}
+          >
+            <Routes location={location}>
+              <Route path="/" element={<HomePage t={t} />} />
+              <Route path="/assistant" element={<AssistantPage t={t} />} />
+              <Route path="/weather" element={<WeatherPage t={t} />} />
+              <Route path="/disease" element={<DiseasePage t={t} />} />
+              <Route
+                path="/about"
+                element={(
+                  <AboutPage
+                    language={language}
+                    onLanguageChange={setLanguage}
+                    t={t}
+                  />
+                )}
+              />
+              <Route path="*" element={<Navigate to="/" replace />} />
+            </Routes>
+          </motion.div>
+        </AnimatePresence>
       </div>
     </main>
   )

@@ -1,31 +1,22 @@
 import { motion } from 'framer-motion'
 import { useEffect, useState } from 'react'
+import { Link, NavLink } from 'react-router-dom'
 
 export default function PremiumNavbar({ t }) {
   const [hoveredItem, setHoveredItem] = useState(null)
-  const [activeItem, setActiveItem] = useState('features')
   const [isCompact, setIsCompact] = useState(false)
 
   const navItems = [
-    { key: 'features', label: t.features },
-    { key: 'assistant', label: t.assistant },
-    { key: 'advisory', label: t.advisory },
+    { key: 'home', label: 'Home', to: '/' },
+    { key: 'assistant', label: t.assistant, to: '/assistant' },
+    { key: 'weather', label: t.advisory, to: '/weather' },
+    { key: 'disease', label: 'Disease', to: '/disease' },
+    { key: 'about', label: 'About', to: '/about' },
   ]
 
   useEffect(() => {
-    const sectionKeys = ['features', 'assistant', 'advisory']
-
     const handleScroll = () => {
       setIsCompact(window.scrollY > 48)
-
-      const current = sectionKeys
-        .map((key) => ({ key, section: document.getElementById(key) }))
-        .filter(({ section }) => section && section.getBoundingClientRect().top <= 180)
-        .at(-1)
-
-      if (current) {
-        setActiveItem(current.key)
-      }
     }
 
     handleScroll()
@@ -89,28 +80,28 @@ export default function PremiumNavbar({ t }) {
         <div className="premium-navbar-sheen" aria-hidden="true" />
 
         <div className="flex min-w-0 items-center justify-between gap-3">
-          <motion.a
-            href="#"
+          <motion.div
             variants={logoVariants}
-            className="group relative z-10 flex min-w-0 items-center gap-2 sm:gap-3"
-            aria-label="AgriAI home"
           >
-            <motion.span
-              className="nav-ai-orb"
-              aria-hidden="true"
+            <Link
+              to="/"
+              className="group relative z-10 flex min-w-0 items-center gap-2 sm:gap-3"
+              aria-label="AgriAI home"
             >
-              <span className="nav-ai-orb-core">AI</span>
-            </motion.span>
+              <span className="nav-ai-orb" aria-hidden="true">
+                <span className="nav-ai-orb-core">AI</span>
+              </span>
 
-            <span className="relative z-10 min-w-0">
-              <span className="block bg-gradient-to-r from-emerald-500 via-lime-500 to-teal-500 bg-clip-text text-xl font-black tracking-tight text-transparent sm:text-2xl md:text-3xl">
-                AgriAI
+              <span className="relative z-10 min-w-0">
+                <span className="block bg-gradient-to-r from-emerald-500 via-lime-500 to-teal-500 bg-clip-text text-xl font-black tracking-tight text-transparent sm:text-2xl md:text-3xl">
+                  AgriAI
+                </span>
+                <span className="block text-[0.56rem] font-bold uppercase tracking-[0.18em] text-emerald-800/70 sm:text-[0.66rem] sm:tracking-[0.28em]">
+                  Neural Farming
+                </span>
               </span>
-              <span className="block text-[0.56rem] font-bold uppercase tracking-[0.18em] text-emerald-800/70 sm:text-[0.66rem] sm:tracking-[0.28em]">
-                Neural Farming
-              </span>
-            </span>
-          </motion.a>
+            </Link>
+          </motion.div>
 
           <motion.div
             className="ai-online-badge flex md:hidden"
@@ -126,44 +117,50 @@ export default function PremiumNavbar({ t }) {
         <motion.div className="relative z-10 flex min-w-0 items-center justify-between gap-2 md:justify-end md:gap-3">
           <div className="flex min-w-0 flex-1 items-center gap-1 rounded-full border border-white/50 bg-white/35 p-1 shadow-inner shadow-white/60 md:flex-none md:gap-2 md:bg-white/20">
             {navItems.map((item, i) => {
-              const isActive = activeItem === item.key
               const isHovered = hoveredItem === i
 
               return (
-                <motion.a
+                <NavLink
                   key={item.key}
-                  custom={i}
-                  variants={itemVariants}
-                  initial="hidden"
-                  animate="visible"
-                  href={`#${item.key}`}
+                  to={item.to}
+                  end={item.to === '/'}
                   onMouseEnter={() => setHoveredItem(i)}
                   onMouseLeave={() => setHoveredItem(null)}
                   onFocus={() => setHoveredItem(i)}
                   onBlur={() => setHoveredItem(null)}
                   className="premium-nav-link"
                 >
-                  <motion.span
-                    animate={{
-                      y: isHovered ? -1 : 0,
-                      color: isActive || isHovered ? '#047857' : '#334155',
-                    }}
-                    transition={{ duration: 0.22 }}
-                  >
-                    {item.label}
-                  </motion.span>
-                  {(isActive || isHovered) && (
+                  {({ isActive }) => (
                     <motion.span
-                      className="premium-nav-underline"
-                      layoutId="active-nav-underline"
-                      transition={{
-                        type: 'spring',
-                        stiffness: 420,
-                        damping: 32,
-                      }}
-                    />
+                      custom={i}
+                      variants={itemVariants}
+                      initial="hidden"
+                      animate="visible"
+                      className="relative"
+                    >
+                      <motion.span
+                        animate={{
+                          y: isHovered ? -1 : 0,
+                          color: isActive || isHovered ? '#047857' : '#334155',
+                        }}
+                        transition={{ duration: 0.22 }}
+                      >
+                        {item.label}
+                      </motion.span>
+                      {(isActive || isHovered) && (
+                        <motion.span
+                          className="premium-nav-underline"
+                          layoutId="active-nav-underline"
+                          transition={{
+                            type: 'spring',
+                            stiffness: 420,
+                            damping: 32,
+                          }}
+                        />
+                      )}
+                    </motion.span>
                   )}
-                </motion.a>
+                </NavLink>
               )
             })}
           </div>
@@ -178,17 +175,20 @@ export default function PremiumNavbar({ t }) {
             <span>AI Online</span>
           </motion.div>
 
-          <motion.a
-            href="#features"
+          <motion.div
             initial={{ opacity: 0, scale: 0.86 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.45, delay: 0.38 }}
             whileHover={{ scale: 1.04, y: -2 }}
             whileTap={{ scale: 0.97 }}
-            className="premium-nav-cta hidden sm:inline-flex"
           >
-            <span>{t.getStarted}</span>
-          </motion.a>
+            <Link
+              to="/assistant"
+            className="premium-nav-cta hidden sm:inline-flex"
+            >
+              <span>{t.getStarted}</span>
+            </Link>
+          </motion.div>
         </motion.div>
       </motion.div>
     </motion.nav>
