@@ -1,11 +1,16 @@
 import { motion } from 'framer-motion'
-import { Link } from 'react-router-dom'
 import FloatingLeaves from '../components/FloatingLeaves'
 import HeroVisual from '../components/HeroVisual'
 import { stats } from '../data/agriData'
 import { cardReveal, sectionReveal } from '../animations/motionVariants'
+import { useLanguage } from '../contexts/useLanguage'
+import { handleSectionLinkClick } from '../utils/scrollToSection'
 
-function HeroSection({ t }) {
+function HeroSection() {
+  const { t } = useLanguage()
+  const heroText = t.hero
+  const heroChips = heroText.stats ?? []
+
   return (
     <motion.section
       variants={sectionReveal}
@@ -24,7 +29,7 @@ function HeroSection({ t }) {
 
       <motion.div variants={cardReveal} className="animate-fade-up relative z-10">
         <motion.div variants={cardReveal} className="mb-4 flex flex-wrap gap-2">
-          {['Crop AI', 'Weather Signals', 'Disease Scan'].map((chip) => (
+          {heroChips.map((chip) => (
             <span
               key={chip}
               className="rounded-full border border-emerald-200/80 bg-white/75 px-3 py-1 text-xs font-black uppercase tracking-[0.12em] text-emerald-800 shadow-sm shadow-emerald-950/5 backdrop-blur-sm"
@@ -37,19 +42,19 @@ function HeroSection({ t }) {
           variants={cardReveal}
           className="hero-eyebrow mb-5 inline-flex rounded-full px-4 py-2 text-sm font-bold text-emerald-800"
         >
-          {t.eyebrow}
+          {heroText.eyebrow}
         </motion.span>
         <motion.h1
           variants={cardReveal}
           className="max-w-4xl bg-gradient-to-r from-slate-950 via-emerald-800 to-lime-500 bg-clip-text text-3xl font-black leading-tight text-transparent sm:text-5xl lg:text-7xl"
         >
-          {t.title}
+          {heroText.title}
         </motion.h1>
         <motion.p
           variants={cardReveal}
           className="mt-5 max-w-2xl text-base leading-7 text-slate-600 sm:mt-6 sm:text-lg sm:leading-8"
         >
-          {t.subtitle}
+          {heroText.subtitle}
         </motion.p>
 
         <motion.div variants={cardReveal} className="mt-8 flex flex-col gap-4 sm:flex-row">
@@ -57,23 +62,25 @@ function HeroSection({ t }) {
             whileHover={{ y: -4, scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
           >
-            <Link
-              to="/disease"
+            <a
+              href="#disease"
+              onClick={(event) => handleSectionLinkClick(event, 'disease')}
               className="button-lift animated-gradient block rounded-full bg-gradient-to-r from-emerald-600 to-lime-500 px-7 py-4 text-center font-bold text-white shadow-xl shadow-emerald-700/25 transition hover:-translate-y-1 hover:shadow-2xl hover:shadow-emerald-700/30"
             >
-              {t.primaryCta}
-            </Link>
+              {heroText.primaryCta}
+            </a>
           </motion.div>
           <motion.div
             whileHover={{ y: -4, scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
           >
-            <Link
-              to="/assistant"
+            <a
+              href="#assistant"
+              onClick={(event) => handleSectionLinkClick(event, 'assistant')}
               className="hero-secondary-cta button-lift block rounded-full px-7 py-4 text-center font-bold text-emerald-900 transition"
             >
-              {t.secondaryCta}
-            </Link>
+              {heroText.secondaryCta}
+            </a>
           </motion.div>
         </motion.div>
 
@@ -88,7 +95,7 @@ function HeroSection({ t }) {
                 {stat.value}
               </p>
               <p className="mt-1 text-sm font-semibold text-slate-500">
-                {t.stats[index]}
+                {heroText.stats[index]}
               </p>
             </motion.div>
           ))}
@@ -98,6 +105,18 @@ function HeroSection({ t }) {
       <motion.div variants={cardReveal} className="relative z-10">
         <HeroVisual />
       </motion.div>
+
+      <motion.a
+        href="#about"
+        onClick={(event) => handleSectionLinkClick(event, 'about')}
+        initial={{ opacity: 0, y: 8 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.9, duration: 0.4 }}
+        className="absolute bottom-4 left-1/2 hidden -translate-x-1/2 rounded-full border border-emerald-200/80 bg-white/70 px-3 py-2 text-xs font-black uppercase tracking-[0.18em] text-emerald-700 shadow-sm backdrop-blur-sm transition hover:border-lime-300 hover:bg-white lg:inline-flex"
+        aria-label="Scroll to about section"
+      >
+        v
+      </motion.a>
     </motion.section>
   )
 }

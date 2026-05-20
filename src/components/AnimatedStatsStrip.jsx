@@ -1,8 +1,10 @@
 import { motion } from 'framer-motion'
 import { useState, useEffect } from 'react'
 import { stats } from '../data/agriData'
+import { useLanguage } from '../contexts/useLanguage'
 
 export default function AnimatedStatsStrip() {
+  const { t } = useLanguage()
   const [counts, setCounts] = useState([0, 0, 0])
 
   useEffect(() => {
@@ -122,7 +124,7 @@ export default function AnimatedStatsStrip() {
                   {idx === 1 ? '' : idx === 2 ? '%' : '/7'}
                 </motion.div>
                 <div className="mt-1 text-xs sm:text-sm font-semibold text-slate-600 uppercase tracking-wider">
-                  {stat.label}
+                  {t.hero.stats?.[idx] ?? stat.label}
                 </div>
               </div>
 

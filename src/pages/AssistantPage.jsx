@@ -1,5 +1,8 @@
+import { useLanguage } from '../contexts/useLanguage'
 import FarmingChatbot from '../sections/FarmingChatbot'
 
-export default function AssistantPage({ t }) {
-  return <FarmingChatbot t={t.chatbot} />
+export default function AssistantPage() {
+  const { t } = useLanguage()
+
+  return <FarmingChatbot aria-label={t.chatbot.eyebrow} />
 }

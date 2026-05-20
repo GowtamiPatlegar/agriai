@@ -1,4 +1,9 @@
-function Navbar({ t }) {
+import { useLanguage } from '../contexts/useLanguage'
+
+function Navbar() {
+  const { t } = useLanguage()
+  const navText = t.nav
+
   return (
     <nav className="mx-auto flex w-full max-w-7xl items-center justify-between px-5 py-5 sm:px-8">
       <a href="#" className="flex items-center gap-3">
@@ -12,13 +17,13 @@ function Navbar({ t }) {
 
       <div className="hidden items-center gap-8 text-sm font-semibold text-slate-600 md:flex">
         <a className="transition hover:text-emerald-700" href="#features">
-          {t.features}
+          {navText.features}
         </a>
         <a className="transition hover:text-emerald-700" href="#assistant">
-          {t.assistant}
+          {navText.assistant}
         </a>
         <a className="transition hover:text-emerald-700" href="#advisory">
-          {t.advisory}
+          {navText.advisory}
         </a>
       </div>
 
@@ -26,7 +31,7 @@ function Navbar({ t }) {
         href="#features"
         className="button-lift smooth-transition micro-hover rounded-full bg-slate-950 px-5 py-2.5 text-sm font-bold text-white shadow-lg shadow-emerald-900/20 transition hover:-translate-y-0.5 hover:bg-emerald-700"
       >
-        {t.getStarted}
+        {navText.getStarted}
       </a>
     </nav>
   )

@@ -3,16 +3,25 @@ import { AnimatePresence, motion } from 'framer-motion'
 import AIProcessingLoader from '../components/AIProcessingLoader'
 import UploadIcon from '../components/UploadIcon'
 import { cardReveal, sectionReveal, viewportSettings } from '../animations/motionVariants'
+import { useLanguage } from '../contexts/useLanguage'
 import { detectCropDisease } from '../services/diseaseDetectionService'
 import { isImageFile } from '../utils/fileHelpers'
 
-function DiseaseDetection({ t }) {
+function DiseaseDetection() {
+  const { t } = useLanguage()
+  const diseaseText = t.disease
   const [imagePreview, setImagePreview] = useState('')
   const [fileName, setFileName] = useState('')
   const [selectedFile, setSelectedFile] = useState(null)
   const [isDragging, setIsDragging] = useState(false)
   const [isAnalyzing, setIsAnalyzing] = useState(false)
   const [result, setResult] = useState(null)
+  const processingText = {
+    title: diseaseText.analyzing,
+    description: diseaseText.waitingText,
+    steps: [diseaseText.uploadTitle, diseaseText.resultEyebrow, diseaseText.reportTitle],
+    stepLabel: diseaseText.activeStepLabel ?? diseaseText.resultEyebrow,
+  }
 
   function handleImage(file) {
     if (!isImageFile(file)) {
@@ -58,10 +67,9 @@ function DiseaseDetection({ t }) {
       console.error('Full crop disease detection error object:', error)
 
       setResult({
-        diseaseName: 'Analysis unavailable',
+        diseaseName: diseaseText.predictionName,
         confidence: 0,
-        recommendation:
-          'The AI disease detection service could not analyze this image right now. Please check your Hugging Face API key or internet connection, then try again with a clear crop photo.',
+        recommendation: diseaseText.recommendationText,
       })
     } finally {
       setIsAnalyzing(false)
@@ -74,18 +82,19 @@ function DiseaseDetection({ t }) {
       initial="hidden"
       whileInView="visible"
       viewport={viewportSettings}
-      className="particle-field border-y border-emerald-100/80 bg-[radial-gradient(circle_at_top_right,#dcfce7,transparent_28%),linear-gradient(180deg,#ffffff_0%,#f8fafc_100%)] px-4 py-12 text-slate-900 sm:px-6 sm:py-16 md:px-8 lg:py-24"
+      id="disease"
+      className="scroll-section particle-field border-y border-emerald-100/80 bg-[radial-gradient(circle_at_top_right,#dcfce7,transparent_28%),linear-gradient(180deg,#ffffff_0%,#f8fafc_100%)] px-4 py-12 text-slate-900 sm:px-6 sm:py-16 md:px-8 lg:py-24"
     >
       <div className="section-reveal mx-auto max-w-6xl">
         <motion.div variants={cardReveal} className="mb-10 max-w-3xl">
           <p className="text-sm font-black uppercase tracking-[0.18em] text-emerald-600">
-            {t.eyebrow}
+            {diseaseText.eyebrow}
           </p>
           <h1 className="mt-3 text-3xl font-black leading-tight text-slate-950 sm:text-4xl md:text-5xl">
-            {t.title}
+            {diseaseText.title}
           </h1>
           <p className="mt-4 text-base leading-7 text-slate-600 sm:mt-5 sm:text-lg sm:leading-8">
-            {t.subtitle}
+            {diseaseText.subtitle}
           </p>
         </motion.div>
 
@@ -139,12 +148,12 @@ function DiseaseDetection({ t }) {
                           <div className="scan-line absolute left-0 right-0 top-0 h-24 border-y border-lime-200/80 bg-gradient-to-b from-transparent via-lime-300/40 to-transparent shadow-[0_0_42px_rgba(190,242,100,0.78)]" />
                           <div className="absolute inset-4 rounded-2xl border border-lime-200/70 shadow-[0_0_42px_rgba(132,204,22,0.65),inset_0_0_30px_rgba(16,185,129,0.38)]" />
                           <div className="absolute left-4 top-4 rounded-full border border-lime-200/40 bg-slate-950/70 px-4 py-2 text-xs font-black uppercase tracking-[0.16em] text-lime-200 shadow-lg shadow-lime-300/10 backdrop-blur">
-                            Neural crop scan
+                            {diseaseText.analyzing}
                           </div>
                           <div className="absolute bottom-4 left-4 right-4 rounded-2xl border border-white/10 bg-slate-950/70 p-3 text-left shadow-xl shadow-emerald-950/30 backdrop-blur">
                             <div className="flex items-center justify-between gap-3">
                               <span className="text-xs font-black uppercase tracking-[0.16em] text-emerald-200">
-                                AI Detection Overlay
+                                {diseaseText.resultEyebrow}
                               </span>
                               <span className="h-2.5 w-2.5 rounded-full bg-lime-300 shadow-lg shadow-lime-300/70" />
                             </div>
@@ -160,7 +169,7 @@ function DiseaseDetection({ t }) {
                     {fileName}
                   </p>
                   <p className="mt-1 text-sm text-slate-500">
-                    {t.replaceHelp}
+                    {diseaseText.replaceHelp}
                   </p>
                 </div>
               ) : (
@@ -169,13 +178,13 @@ function DiseaseDetection({ t }) {
                     <UploadIcon />
                   </div>
                   <h2 className="text-2xl font-black text-slate-950">
-                    {t.uploadTitle}
+                    {diseaseText.uploadTitle}
                   </h2>
                   <p className="mt-3 leading-7 text-slate-600">
-                    {t.uploadHelp}
+                    {diseaseText.uploadHelp}
                   </p>
                   <span className="button-lift mt-6 inline-flex rounded-full bg-emerald-600 px-5 py-3 text-sm font-bold text-white shadow-lg shadow-emerald-700/25 transition group-hover:bg-emerald-700">
-                    {t.browse}
+                    {diseaseText.browse}
                   </span>
                 </div>
               )}
@@ -187,7 +196,7 @@ function DiseaseDetection({ t }) {
               disabled={!imagePreview || isAnalyzing}
               className="button-lift animated-gradient mt-5 w-full rounded-2xl bg-gradient-to-r from-emerald-600 to-lime-500 px-6 py-4 text-base font-black text-white shadow-xl shadow-emerald-700/25 transition hover:-translate-y-1 hover:shadow-2xl disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:translate-y-0"
             >
-              {isAnalyzing ? t.analyzing : t.analyze}
+              {isAnalyzing ? diseaseText.analyzing : diseaseText.analyze}
             </button>
           </motion.div>
 
@@ -198,15 +207,15 @@ function DiseaseDetection({ t }) {
             <div className="mb-8 flex items-center justify-between">
               <div>
                 <p className="text-sm font-black uppercase tracking-[0.18em] text-lime-300">
-                  {t.resultEyebrow}
+                  {diseaseText.resultEyebrow}
                 </p>
-                <h2 className="mt-2 text-3xl font-black">{t.reportTitle}</h2>
+                <h2 className="mt-2 text-3xl font-black">{diseaseText.reportTitle}</h2>
               </div>
               <span className="h-3 w-3 rounded-full bg-lime-300 shadow-lg shadow-lime-300/70" />
             </div>
 
             <AnimatePresence mode="wait">
-              {isAnalyzing && <AIProcessingLoader key="loader" />}
+              {isAnalyzing && <AIProcessingLoader key="loader" text={processingText} />}
 
               {!isAnalyzing && !result && (
               <motion.div
@@ -218,9 +227,9 @@ function DiseaseDetection({ t }) {
                 className="flex min-h-[260px] flex-col items-center justify-center rounded-3xl border border-white/10 bg-white/5 p-5 text-center sm:min-h-[320px] sm:p-8 lg:min-h-[360px]"
               >
                 <div className="mb-5 h-16 w-16 rounded-full border-4 border-emerald-300/30 border-t-lime-300" />
-                <h3 className="text-2xl font-black">{t.waitingTitle}</h3>
+                <h3 className="text-2xl font-black">{diseaseText.waitingTitle}</h3>
                 <p className="mt-3 leading-7 text-slate-300">
-                  {t.waitingText}
+                  {diseaseText.waitingText}
                 </p>
               </motion.div>
               )}
@@ -244,10 +253,10 @@ function DiseaseDetection({ t }) {
                   className="scan-success-pulse glass-inset rounded-3xl p-5 text-white"
                 >
                   <p className="text-sm font-bold text-slate-300">
-                    {t.diseaseName}
+                    {diseaseText.diseaseName}
                   </p>
                   <p className="mt-2 text-2xl font-black text-lime-200">
-                    {result.diseaseName || t.predictionName}
+                    {result.diseaseName || diseaseText.predictionName}
                   </p>
                 </motion.div>
 
@@ -259,7 +268,7 @@ function DiseaseDetection({ t }) {
                 >
                   <div className="flex items-center justify-between gap-4">
                     <p className="text-sm font-bold text-slate-300">
-                      {t.confidence}
+                      {diseaseText.confidence}
                     </p>
                     <p className="text-2xl font-black text-white">
                       {result.confidence}%
@@ -282,10 +291,10 @@ function DiseaseDetection({ t }) {
                   className="rounded-3xl border border-emerald-300/20 bg-emerald-400/15 p-5 shadow-inner shadow-emerald-200/5 backdrop-blur"
                 >
                   <p className="text-sm font-bold text-lime-200">
-                    {t.treatment}
+                    {diseaseText.treatment}
                   </p>
                   <p className="mt-3 leading-7 text-emerald-50">
-                    {result.recommendation || t.recommendationText}
+                    {result.recommendation || diseaseText.recommendationText}
                   </p>
                 </motion.div>
               </motion.div>

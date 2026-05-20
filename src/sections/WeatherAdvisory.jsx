@@ -3,6 +3,7 @@ import { AnimatePresence, motion } from 'framer-motion'
 import WeatherCard from '../components/WeatherCard'
 import WeatherIcon from '../components/WeatherIcon'
 import { cardReveal, sectionReveal, viewportSettings } from '../animations/motionVariants'
+import { useLanguage } from '../contexts/useLanguage'
 
 const fallbackLocation = {
   name: 'Hyderabad Farm Belt',
@@ -331,7 +332,9 @@ function getCurrentPosition() {
   })
 }
 
-function WeatherAdvisory({ t }) {
+function WeatherAdvisory() {
+  const { t: translations } = useLanguage()
+  const t = translations.weather
   const [isLoading, setIsLoading] = useState(true)
   const [isUsingFallback, setIsUsingFallback] = useState(false)
   const [weatherError, setWeatherError] = useState('')
@@ -339,7 +342,7 @@ function WeatherAdvisory({ t }) {
     ...fallbackLocation,
     temp: '29 C',
     feels: 'Feels like 32 C',
-    condition: 'Cloudy with evening showers',
+    condition: t.forecast,
     icon: 'cloud',
     window: '6 AM - 10 AM',
     crop: 'Rice + Vegetables',
@@ -406,8 +409,37 @@ function WeatherAdvisory({ t }) {
   }, [])
 
   useEffect(() => {
-    loadWeather()
+    const timeoutId = window.setTimeout(loadWeather, 0)
+
+    return () => window.clearTimeout(timeoutId)
   }, [loadWeather])
+
+  const translatedMetricNotes = [t.forecast, t.irrigationText, t.alertTitle, t.bestWindow, t.waterSaving]
+  const displaySelectedLocation = {
+    ...selectedLocation,
+    name: isUsingFallback ? t.eyebrow : selectedLocation.name,
+    feels: selectedLocation.feels?.replace('Feels like', t.today) ?? selectedLocation.feels,
+    condition: t.forecast,
+    crop: t.recommendationsTitle,
+  }
+  const displayWeatherAlert = isUsingFallback || weatherError ? t.alertTitle : weatherAlert
+  const displayAdvisoryBadge = isUsingFallback || weatherError ? t.advisoryBadge : advisoryBadge
+  const displayMetrics = metrics.map((metric, index) => ({
+    ...metric,
+    label: t.metrics?.[index] ?? metric.label,
+    note: translatedMetricNotes[index] ?? metric.note,
+  }))
+  const displayRecommendations = recommendations.map((recommendation, index) => ({
+    ...recommendation,
+    title: [t.recommendationsTitle, t.irrigationHeading, t.irrigationTitle][index] ?? recommendation.title,
+    text: t.recommendations?.[index] ?? recommendation.text,
+    tag: [t.advisoryBadge, t.waterSaving, t.alertEyebrow][index] ?? recommendation.tag,
+  }))
+  const displayCropAlerts = cropAlerts.map((alert, index) => ({
+    ...alert,
+    title: [t.alertEyebrow, t.irrigationHeading, t.bestWindow][index] ?? alert.title,
+    text: t.recommendations?.[index] ?? alert.text,
+  }))
 
   return (
     <motion.section
@@ -415,8 +447,8 @@ function WeatherAdvisory({ t }) {
       initial="hidden"
       whileInView="visible"
       viewport={viewportSettings}
-      id="advisory"
-      className="weather-dashboard-section overflow-hidden border-b border-emerald-100/80 px-4 py-12 text-slate-900 sm:px-6 sm:py-16 md:px-8 lg:py-24"
+      id="weather"
+      className="scroll-section weather-dashboard-section overflow-hidden border-b border-emerald-100/80 px-4 py-12 text-slate-900 sm:px-6 sm:py-16 md:px-8 lg:py-24"
     >
       <div className="weather-cloud-field" aria-hidden="true">
         <span />
@@ -442,11 +474,11 @@ function WeatherAdvisory({ t }) {
                 {t.alertEyebrow}
               </p>
               <h2 className="mt-2 text-2xl font-black text-slate-950">
-                {weatherAlert}
+                {displayWeatherAlert}
               </h2>
             </div>
             <span className="rounded-full bg-white/80 px-4 py-2 text-sm font-black text-emerald-800 shadow-sm">
-              {advisoryBadge}
+              {displayAdvisoryBadge}
             </span>
           </div>
         </motion.div>
@@ -482,21 +514,21 @@ function WeatherAdvisory({ t }) {
                 </span>
                 <div className="min-w-0 flex-1">
                   <p className="text-xs font-black uppercase tracking-[0.2em] text-emerald-700">
-                    Live location weather
+                    {t.eyebrow}
                   </p>
                   <AnimatePresence mode="wait">
                     <motion.p
-                      key={isLoading ? 'loading-location' : selectedLocation.name}
+                      key={isLoading ? 'loading-location' : displaySelectedLocation.name}
                       initial={{ opacity: 0, y: 6 }}
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, y: -6 }}
                       className="mt-1 truncate text-base font-black text-slate-950"
                     >
-                      {isLoading ? 'Detecting your location...' : selectedLocation.name}
+                      {isLoading ? 'Detecting your location...' : displaySelectedLocation.name}
                     </motion.p>
                   </AnimatePresence>
                   <p className="mt-1 text-sm font-semibold text-slate-500">
-                    {isUsingFallback ? 'Fallback weather is active.' : 'Using your current coordinates.'}
+                    {isUsingFallback ? t.advisoryBadge : t.alertEyebrow}
                   </p>
                 </div>
               </div>
@@ -507,7 +539,7 @@ function WeatherAdvisory({ t }) {
                   animate={{ opacity: 1, y: 0 }}
                   className="mt-4 rounded-2xl border border-emerald-100 bg-emerald-50/80 p-3 text-sm font-semibold text-emerald-900"
                 >
-                  {weatherError}
+                  {t.alertTitle}
                 </motion.div>
               )}
 
@@ -518,7 +550,7 @@ function WeatherAdvisory({ t }) {
                   disabled={isLoading}
                   className="button-lift rounded-2xl bg-emerald-700 px-4 py-3 text-sm font-black text-white shadow-lg shadow-emerald-700/20 transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-60"
                 >
-                  {isLoading ? 'Refreshing...' : 'Refresh weather'}
+                  {isLoading ? t.today : t.forecast}
                 </button>
                 {weatherError && (
                   <button
@@ -526,7 +558,7 @@ function WeatherAdvisory({ t }) {
                     onClick={() => loadWeather({ forceFallback: true })}
                     className="rounded-2xl border border-emerald-100 bg-white px-4 py-3 text-sm font-black text-emerald-800 transition hover:border-lime-200 hover:bg-emerald-50"
                   >
-                    Use fallback
+                    {t.advisoryBadge}
                   </button>
                 )}
               </div>
@@ -542,34 +574,34 @@ function WeatherAdvisory({ t }) {
                 <p className="text-sm font-bold text-emerald-50">{t.today}</p>
                 <div className="mt-5 flex min-w-0 items-center gap-3 sm:gap-4">
                   <div className="current-weather-icon">
-                    <WeatherIcon type={selectedLocation.icon ?? 'cloud'} />
+                    <WeatherIcon type={displaySelectedLocation.icon ?? 'cloud'} />
                   </div>
                   <div>
                     <p className="text-4xl font-black sm:text-6xl md:text-7xl">
-                      {selectedLocation.temp}
+                      {displaySelectedLocation.temp}
                     </p>
                     <p className="mt-2 text-sm font-semibold text-emerald-50">
-                      {selectedLocation.feels}
+                      {displaySelectedLocation.feels}
                     </p>
                   </div>
                 </div>
                 <p className="mt-4 text-lg font-semibold text-emerald-50">
-                  {selectedLocation.condition}
+                  {displaySelectedLocation.condition}
                 </p>
               </div>
 
               <div className="grid gap-3 sm:grid-cols-2 md:max-w-sm">
                 <div className="weather-mini-tile">
                   <p>{t.bestWindow}</p>
-                  <strong>{selectedLocation.window}</strong>
+                  <strong>{displaySelectedLocation.window}</strong>
                 </div>
                 <div className="weather-mini-tile">
-                  <p>Crop Profile</p>
-                  <strong>{selectedLocation.crop}</strong>
+                  <p>{t.recommendationsTitle}</p>
+                  <strong>{displaySelectedLocation.crop}</strong>
                 </div>
                 <div className="weather-mini-tile sm:col-span-2">
-                  <p>AI Confidence</p>
-                  <strong>{selectedLocation.confidence}</strong>
+                  <p>{t.advisoryBadge}</p>
+                  <strong>{displaySelectedLocation.confidence}</strong>
                 </div>
               </div>
             </div>
@@ -581,7 +613,7 @@ function WeatherAdvisory({ t }) {
             <WeatherDashboardSkeleton />
           ) : (
             <motion.div
-              key={selectedLocation.name}
+              key={displaySelectedLocation.name}
               variants={sectionReveal}
               initial="hidden"
               animate="visible"
@@ -589,7 +621,7 @@ function WeatherAdvisory({ t }) {
               className="mt-10 space-y-8"
             >
               <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-5">
-                {metrics.map((metric) => (
+                {displayMetrics.map((metric) => (
                   <WeatherCard key={metric.label} metric={metric} />
                 ))}
               </div>
@@ -601,14 +633,14 @@ function WeatherAdvisory({ t }) {
                 <div className="mb-5 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
                   <div>
                     <p className="text-sm font-black uppercase tracking-[0.18em] text-emerald-600">
-                      7-Day Forecast
+                      {t.forecast}
                     </p>
                     <h2 className="mt-2 text-2xl font-black text-slate-950">
-                      Field planning outlook
+                      {t.title}
                     </h2>
                   </div>
                   <span className="rounded-full border border-emerald-100 bg-white/70 px-4 py-2 text-sm font-black text-emerald-800">
-                    AI updated now
+                    {t.advisoryBadge}
                   </span>
                 </div>
 
@@ -629,10 +661,10 @@ function WeatherAdvisory({ t }) {
                         {item.high}
                       </p>
                       <p className="text-xs font-bold text-slate-500">
-                        Low {item.low}
+                        {t.bestWindow} {item.low}
                       </p>
                       <p className="mt-3 rounded-full bg-emerald-50 px-3 py-1 text-xs font-black text-emerald-700">
-                        {item.rain} rain
+                        {item.rain} {t.metrics?.[2]}
                       </p>
                       <p className="mt-2 text-xs font-semibold text-slate-500">
                         {item.note}
@@ -651,7 +683,7 @@ function WeatherAdvisory({ t }) {
                     {t.recommendationsTitle}
                   </p>
                   <div className="mt-5 grid gap-4">
-                    {recommendations.map((recommendation) => (
+                    {displayRecommendations.map((recommendation) => (
                       <div
                         key={recommendation.title}
                         className="ai-recommendation-row rounded-3xl p-4"
@@ -675,11 +707,11 @@ function WeatherAdvisory({ t }) {
                   className="smart-alerts-panel glow-card min-w-0 rounded-[1.5rem] p-4 text-white sm:rounded-[2rem] sm:p-6"
                 >
                   <p className="text-sm font-black uppercase tracking-[0.18em] text-lime-300">
-                    Smart Crop Alerts
+                    {t.alertEyebrow}
                   </p>
-                  <h2 className="mt-3 text-3xl font-black">Weather-aware crop watch</h2>
+                  <h2 className="mt-3 text-3xl font-black">{t.alertTitle}</h2>
                   <div className="mt-5 space-y-3">
-                    {cropAlerts.map((alert) => (
+                    {displayCropAlerts.map((alert) => (
                       <div key={alert.title} className="smart-alert-row">
                         <span>{alert.level}</span>
                         <div>

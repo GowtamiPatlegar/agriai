@@ -1,12 +1,10 @@
 import { motion } from 'framer-motion'
+import { useLanguage } from '../contexts/useLanguage'
 
-const processingSteps = [
-  'Scanning crop symptoms',
-  'Detecting visual stress patterns',
-  'Matching multi-crop model',
-]
+function AIProcessingLoader({ text = {} }) {
+  const { t } = useLanguage()
+  const steps = text.steps ?? [t.disease.uploadTitle, t.disease.resultEyebrow, t.disease.reportTitle]
 
-function AIProcessingLoader() {
   return (
     <motion.div
       role="status"
@@ -38,16 +36,15 @@ function AIProcessingLoader() {
           </div>
         </div>
         <h3 className="text-2xl font-black">
-          Analyzing crop health using AI...
+          {text.title ?? t.disease.analyzing}
         </h3>
         <p className="mt-2 max-w-sm leading-7 text-slate-300">
-          Extracting visual symptoms and comparing them with multi-crop disease
-          and stress patterns.
+          {text.description ?? t.disease.waitingText}
         </p>
       </div>
 
       <div className="mt-7 space-y-4">
-        {processingSteps.map((step, index) => (
+        {steps.map((step, index) => (
           <div
             key={step}
             className="rounded-2xl bg-white/8 p-4 ring-1 ring-white/10 micro-hover smooth-transition"
@@ -55,7 +52,7 @@ function AIProcessingLoader() {
             <div className="flex items-center justify-between gap-4">
               <span className="text-sm font-bold text-slate-200">{step}</span>
               <span className="text-xs font-black text-lime-200">
-                Step {index + 1}
+                {text.stepLabel ?? t.disease.resultEyebrow} {index + 1}
               </span>
             </div>
             <div className="mt-3 h-2 overflow-hidden rounded-full bg-white/10">

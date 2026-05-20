@@ -1602,6 +1602,21 @@
     display: none;
   }
 
+  .weather-dashboard-section {
+    overflow-x: clip;
+  }
+
+  .weather-alert-banner,
+  .weather-glass-card,
+  .current-weather-panel,
+  .smart-alerts-panel {
+    border-radius: 1.35rem;
+  }
+
+  .current-weather-panel {
+    padding: 1rem;
+  }
+
   .premium-navbar-shell {
     border-radius: 1.35rem;
   }
@@ -1653,6 +1668,11 @@
     height: 2.25rem;
   }
 
+  .current-weather-panel .text-4xl {
+    font-size: clamp(2rem, 12vw, 3.25rem);
+    line-height: 1;
+  }
+
   .ai-recommendation-row,
   .smart-alert-row {
     grid-template-columns: 1fr;
@@ -1668,6 +1688,19 @@
   .weather-mini-tile {
     border-radius: 1rem;
     padding: 0.85rem;
+    min-width: 0;
+  }
+
+  .weather-mini-tile strong {
+    overflow-wrap: anywhere;
+    font-size: 0.98rem;
+  }
+
+  .forecast-card,
+  .weather-glass-card,
+  .ai-recommendation-row,
+  .smart-alert-row {
+    min-width: 0;
   }
 }
 
@@ -1682,6 +1715,21 @@
 
   .ai-online-badge {
     display: none;
+  }
+
+  .current-weather-icon {
+    width: 3.25rem;
+    height: 3.25rem;
+    border-radius: 1.1rem;
+  }
+
+  .current-weather-icon svg {
+    width: 1.9rem;
+    height: 1.9rem;
+  }
+
+  .weather-mini-tile {
+    padding: 0.72rem;
   }
 }
 

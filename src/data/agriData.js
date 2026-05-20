@@ -27,6 +27,13 @@ export const features = [
     icon: 'ML',
     gradient: 'from-lime-400 to-emerald-500',
   },
+  {
+    title: 'Mobile Accessibility',
+    description:
+      'Move through the full AI agriculture workspace quickly on Android and iPhone with app-like bottom navigation.',
+    icon: 'MB',
+    gradient: 'from-teal-500 to-emerald-500',
+  },
 ]
 
 export const stats = [

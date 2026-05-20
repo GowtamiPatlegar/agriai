@@ -12,6 +12,7 @@
 
 html {
   scroll-behavior: smooth;
+  scroll-padding-top: 7.5rem;
   overflow-x: hidden;
   width: 100%;
 }
@@ -35,6 +36,20 @@ body {
 
 a {
   text-decoration: none;
+}
+
+.scroll-section {
+  scroll-margin-top: 7.5rem;
+}
+
+@media (max-width: 767px) {
+  html {
+    scroll-padding-top: 1rem;
+  }
+
+  .scroll-section {
+    scroll-margin-top: 1rem;
+  }
 }
 
 button,
