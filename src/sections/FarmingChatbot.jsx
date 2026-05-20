@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import ChatMessage from '../components/ChatMessage'
 import TypingIndicator from '../components/TypingIndicator'
@@ -6,17 +6,122 @@ import { cardReveal, sectionReveal, viewportSettings } from '../animations/motio
 import { useLanguage } from '../contexts/useLanguage'
 import { getHuggingFaceChatbotResponse } from '../services/huggingFaceService'
 
+const speechLanguageMap = {
+  en: 'en-IN',
+  te: 'te-IN',
+  hi: 'hi-IN',
+  ta: 'ta-IN',
+  kn: 'kn-IN',
+  ml: 'ml-IN',
+  mr: 'mr-IN',
+}
+
+function getSpeechVoice(speechLanguage) {
+  if (typeof window === 'undefined' || !('speechSynthesis' in window)) {
+    return null
+  }
+
+  const voices = window.speechSynthesis.getVoices()
+  const languagePrefix = speechLanguage.split('-')[0]
+
+  return voices.find((voice) => voice.lang === speechLanguage)
+    ?? voices.find((voice) => voice.lang?.startsWith(`${languagePrefix}-`))
+    ?? null
+}
+
 function FarmingChatbot() {
-  const { t } = useLanguage()
+  const { language, t } = useLanguage()
   const chatbotText = t.chatbot
   const [messages, setMessages] = useState([])
   const [inputValue, setInputValue] = useState('')
   const [isTyping, setIsTyping] = useState(false)
+  const [isListening, setIsListening] = useState(false)
+  const [isSpeechEnabled, setIsSpeechEnabled] = useState(false)
+  const [isSpeechRecognitionSupported] = useState(() => (
+    typeof window !== 'undefined'
+    && ('SpeechRecognition' in window || 'webkitSpeechRecognition' in window)
+  ))
+  const [isSpeechSynthesisSupported] = useState(() => (
+    typeof window !== 'undefined' && 'speechSynthesis' in window
+  ))
   const messagesEndRef = useRef(null)
+  const recognitionRef = useRef(null)
+  const speechLanguage = speechLanguageMap[language] ?? speechLanguageMap.en
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth', block: 'end' })
   }, [messages, isTyping])
+
+  const speakText = useCallback((text) => {
+    if (!isSpeechSynthesisSupported || !isSpeechEnabled || !text) {
+      return
+    }
+
+    window.speechSynthesis.cancel()
+
+    const utterance = new SpeechSynthesisUtterance(text)
+    utterance.lang = speechLanguage
+    utterance.voice = getSpeechVoice(speechLanguage)
+    utterance.rate = 0.95
+    utterance.pitch = 1
+
+    window.speechSynthesis.speak(utterance)
+  }, [isSpeechEnabled, isSpeechSynthesisSupported, speechLanguage])
+
+  useEffect(() => () => {
+    recognitionRef.current?.abort()
+    window.speechSynthesis?.cancel()
+  }, [])
+
+  useEffect(() => {
+    if (!isSpeechSynthesisSupported || isSpeechEnabled) {
+      return
+    }
+
+    window.speechSynthesis.cancel()
+  }, [isSpeechEnabled, isSpeechSynthesisSupported])
+
+  useEffect(() => {
+    recognitionRef.current?.abort()
+    window.speechSynthesis?.cancel()
+  }, [speechLanguage])
+
+  function toggleListening() {
+    if (!isSpeechRecognitionSupported) {
+      return
+    }
+
+    if (isListening) {
+      recognitionRef.current?.stop()
+      setIsListening(false)
+      return
+    }
+
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition
+    const recognition = new SpeechRecognition()
+
+    recognition.lang = speechLanguage
+    recognition.continuous = false
+    recognition.interimResults = true
+    recognition.maxAlternatives = 1
+
+    recognition.onstart = () => setIsListening(true)
+    recognition.onend = () => setIsListening(false)
+    recognition.onerror = () => setIsListening(false)
+    recognition.onresult = (event) => {
+      const transcript = Array.from(event.results)
+        .map((result) => result[0]?.transcript ?? '')
+        .join(' ')
+        .trim()
+
+      if (transcript) {
+        setInputValue(transcript)
+      }
+    }
+
+    recognitionRef.current = recognition
+    recognition.start()
+  }
 
   async function handleSend(event) {
     event.preventDefault()
@@ -38,7 +143,7 @@ function FarmingChatbot() {
     setIsTyping(true)
 
     try {
-      const response = await getHuggingFaceChatbotResponse(question)
+      const response = await getHuggingFaceChatbotResponse(question, language)
       const aiMessage = {
         id: Date.now() + 1,
         sender: 'ai',
@@ -46,17 +151,20 @@ function FarmingChatbot() {
       }
 
       setMessages((currentMessages) => [...currentMessages, aiMessage])
+      speakText(response)
     } catch (error) {
       console.error('Chatbot Hugging Face error:', error instanceof Error ? error.message : error)
       console.error('Full chatbot error object:', error)
 
+      const fallbackText = chatbotText.typingTitle
       const fallbackMessage = {
         id: Date.now() + 1,
         sender: 'ai',
-        text: chatbotText.typingTitle,
+        text: fallbackText,
       }
 
       setMessages((currentMessages) => [...currentMessages, fallbackMessage])
+      speakText(fallbackText)
     } finally {
       setIsTyping(false)
     }
@@ -167,6 +275,79 @@ function FarmingChatbot() {
                 placeholder={chatbotText.placeholder}
                 className="assistant-input min-h-11 w-full min-w-0 flex-1 rounded-2xl border border-emerald-300/20 px-4 text-sm font-medium text-white outline-none transition placeholder:text-slate-400 focus:border-lime-300/70 focus:ring-4 focus:ring-emerald-300/10 sm:min-h-12 sm:text-base"
               />
+              <div className="flex shrink-0 gap-2">
+                <button
+                  type="button"
+                  onClick={toggleListening}
+                  disabled={!isSpeechRecognitionSupported}
+                  className={`button-lift grid min-h-11 w-12 place-items-center rounded-2xl border border-emerald-300/20 text-white shadow-lg transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:translate-y-0 sm:min-h-12 sm:w-12 ${
+                    isListening
+                      ? 'animated-gradient bg-gradient-to-r from-lime-400 to-emerald-400 shadow-lime-300/25'
+                      : 'bg-slate-900/80 shadow-emerald-950/20 hover:border-lime-300/50 hover:bg-emerald-900/80'
+                  }`}
+                  aria-label="Use microphone"
+                  title="Use microphone"
+                >
+                  <span className={`relative grid place-items-center ${isListening ? 'pulse-soft' : ''}`}>
+                    {isListening && (
+                      <span className="absolute h-8 w-8 rounded-full border border-lime-200/70" aria-hidden="true" />
+                    )}
+                    <svg className="relative h-5 w-5" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                      <path
+                        d="M12 14a3 3 0 0 0 3-3V6a3 3 0 1 0-6 0v5a3 3 0 0 0 3 3Z"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                      <path
+                        d="M5 10v1a7 7 0 0 0 14 0v-1M12 18v3M8 21h8"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                  </span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setIsSpeechEnabled((current) => !current)}
+                  disabled={!isSpeechSynthesisSupported}
+                  className={`button-lift grid min-h-11 w-12 place-items-center rounded-2xl border border-emerald-300/20 text-white shadow-lg transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:translate-y-0 sm:min-h-12 sm:w-12 ${
+                    isSpeechEnabled
+                      ? 'animated-gradient bg-gradient-to-r from-emerald-500 to-lime-400 shadow-lime-300/25'
+                      : 'bg-slate-900/80 shadow-emerald-950/20 hover:border-lime-300/50 hover:bg-emerald-900/80'
+                  }`}
+                  aria-label="Toggle speaker"
+                  title="Toggle speaker"
+                >
+                  <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <path
+                      d="M4 9v6h4l5 4V5L8 9H4Z"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                    {isSpeechEnabled ? (
+                      <path
+                        d="M16 9.5a4 4 0 0 1 0 5M18.5 7a7.5 7.5 0 0 1 0 10"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                      />
+                    ) : (
+                      <path
+                        d="m17 9 4 4M21 9l-4 4"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                      />
+                    )}
+                  </svg>
+                </button>
+              </div>
               <button
                 type="submit"
                 disabled={isTyping}

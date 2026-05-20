@@ -1,0 +1,27 @@
+{
+  "black soil": {
+    "aliases": ["black cotton soil", "regur soil", "काली मिट्टी", "నల్ల నేల", "கரிசல் மண்", "ಕಪ್ಪು ಮಣ್ಣು", "കറുത്ത മണ്ണ്", "काळी माती"],
+    "best_crops": ["cotton", "soybean", "sorghum", "pigeon pea"],
+    "notes": "Holds moisture well but can become sticky in heavy rain. Good drainage planning is important."
+  },
+  "red soil": {
+    "aliases": ["लाल मिट्टी", "ఎర్ర నేల", "செம்மண்", "ಕೆಂಪು ಮಣ್ಣು", "ചുവന്ന മണ്ണ്", "लाल माती"],
+    "best_crops": ["chilli", "groundnut", "millets", "pulses"],
+    "notes": "Usually needs organic matter and careful moisture management."
+  },
+  "loamy soil": {
+    "aliases": ["loam", "दोमट मिट्टी", "లోమి నేల", "வண்டல் மண்", "ಮಿಶ್ರ ಮಣ್ಣು", "ദോശമണ്ണ്", "गाळमाती"],
+    "best_crops": ["wheat", "maize", "sugarcane", "vegetables"],
+    "notes": "Balanced soil for many crops. Maintain organic carbon with compost or farmyard manure."
+  },
+  "clay soil": {
+    "aliases": ["heavy soil", "चिकनी मिट्टी", "బంకమట్టి", "களிமண்", "ಜೇಡಿ ಮಣ್ಣು", "കളിമണ്ണ്", "चिकणमाती"],
+    "best_crops": ["rice", "sugarcane"],
+    "notes": "Holds water well but may need drainage before harvest or root-sensitive stages."
+  },
+  "sandy loam soil": {
+    "aliases": ["sandy loam", "रेतीली दोमट", "ఇసుక లోమి", "மணல் கலந்த மண்", "ಮರಳು ಮಿಶ್ರ ಮಣ್ಣು", "മണൽ കലർന്ന മണ്ണ്", "वालुकामय माती"],
+    "best_crops": ["groundnut", "vegetables", "millets"],
+    "notes": "Drains quickly, so use frequent light irrigation and add organic matter."
+  }
+}

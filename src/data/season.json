@@ -1,0 +1,23 @@
+{
+  "kharif": {
+    "aliases": ["monsoon", "rainy season", "खरीफ", "వానాకాలం", "காரிஃப்", "ಮುಂಗಾರು", "മഴക്കാലം"],
+    "months": "June to October",
+    "logic": "Monsoon crops that tolerate warm weather and rainfall.",
+    "recommended_crops": ["rice", "cotton", "maize", "soybean", "groundnut", "chilli"],
+    "advice": "Plan drainage, avoid fertilizer before heavy rain, and monitor fungal diseases and sucking pests."
+  },
+  "rabi": {
+    "aliases": ["winter", "रबी", "యాసంగి", "ரபி", "ಹಿಂಗಾರು", "ശൈത്യകാലം"],
+    "months": "November to March",
+    "logic": "Winter crops that prefer cooler temperatures and controlled irrigation.",
+    "recommended_crops": ["wheat", "mustard", "chickpea", "barley"],
+    "advice": "Protect crop from cold stress, irrigate at critical stages, and monitor rust and aphids."
+  },
+  "summer": {
+    "aliases": ["zaid", "hot season", "summer crop", "गर्मी", "వేసవి", "கோடை", "ಬೇಸಿಗೆ", "വേനൽ"],
+    "months": "March to June",
+    "logic": "Short duration or irrigated crops that can handle heat when water is available.",
+    "recommended_crops": ["sugarcane", "groundnut", "maize", "vegetables", "fodder crops"],
+    "advice": "Use mulching, irrigate early morning or evening, and protect crops from heat stress."
+  }
+}

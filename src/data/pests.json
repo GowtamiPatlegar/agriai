@@ -1,0 +1,34 @@
+{
+  "cotton": {
+    "common_pests": ["bollworm", "aphids", "whitefly"],
+    "basic_prevention": "Use integrated pest management, pheromone traps for bollworm monitoring, field sanitation, and regular leaf underside checks."
+  },
+  "rice": {
+    "common_pests": ["stem borer", "leaf folder", "brown planthopper"],
+    "basic_prevention": "Avoid excess nitrogen, maintain proper spacing, drain excess standing water when pest pressure rises, and monitor weekly."
+  },
+  "wheat": {
+    "common_pests": ["aphids", "termite", "rust"],
+    "basic_prevention": "Use clean seed, avoid water stress, inspect leaves for rust spots, and protect crop during flowering."
+  },
+  "maize": {
+    "common_pests": ["fall armyworm", "stem borer", "aphids"],
+    "basic_prevention": "Check whorl leaves early, remove heavily damaged plants, use traps where available, and follow local IPM guidance."
+  },
+  "soybean": {
+    "common_pests": ["semilooper", "girdle beetle", "stem fly"],
+    "basic_prevention": "Use seed treatment, keep fields weed-free early, and monitor leaves and stems from vegetative stage."
+  },
+  "chilli": {
+    "common_pests": ["thrips", "mites", "fruit borer"],
+    "basic_prevention": "Use sticky traps, avoid overhead irrigation in humid periods, remove infected fruits, and monitor new leaves."
+  },
+  "sugarcane": {
+    "common_pests": ["early shoot borer", "top borer", "white grub"],
+    "basic_prevention": "Use healthy setts, remove dead hearts, keep proper spacing, and follow local biological control advice."
+  },
+  "groundnut": {
+    "common_pests": ["leaf miner", "aphids", "white grub"],
+    "basic_prevention": "Keep the field clean, rotate crops, monitor leaves after rainfall, and avoid moisture stress during pegging."
+  }
+}

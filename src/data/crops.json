@@ -1,0 +1,66 @@
+{
+  "cotton": {
+    "aliases": ["kapas", "कपास", "పత్తి", "பருத்தி", "ಹತ್ತಿ", "പരുത്തി", "कापूस"],
+    "season": "kharif",
+    "soil": "black soil",
+    "water": "moderate",
+    "growth_notes": "Needs warm weather, good drainage, and careful pest monitoring from vegetative stage to boll formation.",
+    "pests": ["bollworm", "aphids", "whitefly"]
+  },
+  "rice": {
+    "aliases": ["paddy", "धान", "వరి", "நெல்", "ಭತ್ತ", "നെല്ല്", "तांदूळ"],
+    "season": "kharif",
+    "soil": "clay soil",
+    "water": "high",
+    "growth_notes": "Needs standing water during early growth, timely transplanting, and drainage before harvest.",
+    "pests": ["stem borer", "leaf folder", "brown planthopper"]
+  },
+  "wheat": {
+    "aliases": ["गेहूं", "గోధుమ", "கோதுமை", "ಗೋಧಿ", "ഗോതമ്പ്", "गहू"],
+    "season": "rabi",
+    "soil": "loamy soil",
+    "water": "moderate",
+    "growth_notes": "Performs best in cool winter weather with irrigation at crown root initiation, flowering, and grain filling.",
+    "pests": ["aphids", "termite", "rust"]
+  },
+  "maize": {
+    "aliases": ["corn", "मक्का", "మొక్కజొన్న", "மக்காச்சோளம்", "ಜೋಳ", "ചോളം", "मका"],
+    "season": "kharif",
+    "soil": "loamy soil",
+    "water": "moderate",
+    "growth_notes": "Needs good drainage, nitrogen support, and moisture during tasseling and grain filling.",
+    "pests": ["fall armyworm", "stem borer", "aphids"]
+  },
+  "soybean": {
+    "aliases": ["सोयाबीन", "సోయాబీన్", "சோயாபீன்", "ಸೋಯಾಬೀನ್", "സോയാബീൻ"],
+    "season": "kharif",
+    "soil": "black soil",
+    "water": "moderate",
+    "growth_notes": "Needs well-drained soil, seed treatment, and weed control in the first 30 to 40 days.",
+    "pests": ["semilooper", "girdle beetle", "stem fly"]
+  },
+  "chilli": {
+    "aliases": ["chili", "mirchi", "मिर्च", "మిరప", "மிளகாய்", "ಮೆಣಸಿನಕಾಯಿ", "മുളക്", "मिरची"],
+    "season": "kharif",
+    "soil": "red soil",
+    "water": "moderate",
+    "growth_notes": "Needs well-drained soil, steady moisture, and close monitoring for sucking pests and fruit rot.",
+    "pests": ["thrips", "mites", "fruit borer"]
+  },
+  "sugarcane": {
+    "aliases": ["गन्ना", "చెరకు", "கரும்பு", "ಕಬ್ಬು", "കരിമ്പ്", "ऊस"],
+    "season": "summer",
+    "soil": "loamy soil",
+    "water": "high",
+    "growth_notes": "Long duration crop needing regular irrigation, earthing up, and balanced nutrition.",
+    "pests": ["early shoot borer", "top borer", "white grub"]
+  },
+  "groundnut": {
+    "aliases": ["peanut", "मूंगफली", "వేరుశెనగ", "நிலக்கடலை", "ಕಡಲೆಕಾಯಿ", "നിലക്കടല", "भुईमूग"],
+    "season": "kharif",
+    "soil": "sandy loam soil",
+    "water": "low to moderate",
+    "growth_notes": "Needs loose soil for pod formation and careful irrigation during flowering and pegging.",
+    "pests": ["leaf miner", "aphids", "white grub"]
+  }
+}
